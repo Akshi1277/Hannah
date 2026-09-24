@@ -2,67 +2,78 @@
 
 import { motion } from "framer-motion";
 import { brand, capabilities, footer } from "../content";
-import { EASE, RegMark } from "./primitives";
+import { EASE } from "./primitives";
+
+const colLabel = "mb-6 text-[12px] font-semibold uppercase tracking-[0.22em] text-cream/45";
+const link = "text-[17px] text-cream/85 transition-colors duration-300 hover:text-copper";
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-charcoal pb-28 pt-[14vh] text-cream md:pb-10">
-      <div className="gutter">
-        <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-4">
-            <img src={brand.logo.light} alt={brand.name} width={220} height={80} className="mb-10 h-14 w-auto md:h-16" loading="lazy" />
-            {footer.lines.map((l, k) => (
-              <p key={l} className={k === 0 ? "text-[26px] font-semibold tracking-[-0.02em]" : "mt-2 text-[16px] text-cream/65"}>{l}</p>
-            ))}
-            <div className="mt-8 space-y-1">
-              <a href={`mailto:${brand.email}`} className="block text-[17px] hover:text-copper">{brand.email}</a>
-              <a href={brand.phoneHref} className="block text-[17px] hover:text-copper">{brand.phone}</a>
-            </div>
+    <footer className="relative isolate overflow-hidden bg-[#141210] text-cream">
+      {/* HANNAH watermark: a light serif, barely lifted off the page and cut by the bottom edge */}
+      <motion.p
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 select-none whitespace-nowrap text-center font-[family-name:var(--font-serif)] text-[clamp(64px,21.5vw,460px)] font-light uppercase leading-[0.8] tracking-[0.03em] text-cream/[0.045]"
+        initial={{ opacity: 0, y: "55%" }}
+        whileInView={{ opacity: 1, y: "40%" }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.8, ease: EASE }}
+      >
+        {footer.watermark}
+      </motion.p>
+
+      <div className="gutter pb-10 pt-[12vh] md:pb-10">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-0">
+          {/* sign-off */}
+          <div className="lg:col-span-4 lg:pr-10">
+            <img src={brand.logo.light} alt={brand.name} width={165} height={60} className="mb-10 h-11 w-auto opacity-90" loading="lazy" />
+            <p className="font-[family-name:var(--font-serif)] text-[clamp(44px,4.4vw,68px)] font-light leading-[1.02]">
+              {footer.signoff[0]}
+              <br />
+              <em className="text-[#C39A6B]">{footer.signoff[1]}</em>
+            </p>
+            <p className="mt-8 text-[17px] text-cream/65">{footer.strap}</p>
           </div>
-          <nav aria-label="Footer" className="md:col-span-3 md:col-start-7">
-            <p className="label mb-5 text-cream/45">Navigate</p>
-            <ul className="space-y-2">
+
+          {/* sitemap */}
+          <nav aria-label="Footer" className="lg:col-span-2 lg:border-l lg:border-cream/10 lg:pl-8 lg:pl-12">
+            <p className={colLabel}>Sitemap</p>
+            <ul className="space-y-3">
               {footer.nav.map((n) => (
-                <li key={n.href}><a href={n.href} className="text-[16px] text-cream/85 hover:text-copper">{n.label}</a></li>
+                <li key={n.href}>
+                  <a href={n.href} className={link}>{n.label}</a>
+                </li>
               ))}
             </ul>
           </nav>
-          <div className="md:col-span-3">
-            <p className="label mb-5 text-cream/45">Capabilities</p>
-            <ul className="space-y-2">
+
+          {/* capabilities */}
+          <div className="lg:col-span-3 lg:border-l lg:border-cream/10 lg:pl-8 lg:pl-12">
+            <p className={colLabel}>Capabilities</p>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-3">
               {capabilities.map((c) => (
-                <li key={c.n}><a href="#capabilities" className="text-[16px] text-cream/85 hover:text-copper">{c.title}</a></li>
+                <li key={c.n}>
+                  <a href="#capabilities" className={`${link} leading-snug`}>{c.title}</a>
+                </li>
               ))}
             </ul>
           </div>
+
+          {/* enquiries */}
+          <div className="lg:col-span-3 lg:border-l lg:border-cream/10 lg:pl-8 lg:pl-12">
+            <p className={colLabel}>Enquiries</p>
+            <a href={`mailto:${brand.email}`} className="block whitespace-nowrap text-[17px] text-[#C39A6B] transition-colors hover:text-cream">
+              {brand.email}
+            </a>
+            <a href={brand.phoneHref} className={`${link} mt-2 block`}>{brand.phone}</a>
+            <p className="mt-3 text-[15px] leading-snug text-cream/50">{footer.enquiriesNote}</p>
+          </div>
         </div>
-      </div>
 
-      <div className="mt-[12vh] overflow-hidden px-2" aria-hidden="true">
-        <motion.p
-          className="display whitespace-nowrap text-center text-[clamp(64px,19.5vw,420px)] leading-[0.8]"
-          initial={{ y: "40%", opacity: 0 }}
-          whileInView={{ y: "0%", opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4, ease: EASE }}
-        >
-          Hannah
-        </motion.p>
-        <motion.p
-          className="display whitespace-nowrap text-center text-[clamp(64px,19.5vw,420px)] leading-[0.8] text-copper"
-          initial={{ y: "40%", opacity: 0 }}
-          whileInView={{ y: "0%", opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4, ease: EASE, delay: 0.12 }}
-        >
-          Pixels
-        </motion.p>
-      </div>
-      <p className="sr-only">Hannah Pixels</p>
-
-      <div className="gutter mt-10 flex flex-col gap-3 border-t border-cream/10 pt-6 md:flex-row md:items-center md:justify-between">
-        <p className="label text-cream/55">{footer.copyright}</p>
-        <p className="label flex items-center gap-3 text-cream/55"><RegMark className="h-3 w-3 text-copper" /> {footer.sign}</p>
+        <div className="mt-[14vh] flex flex-col gap-3 border-t border-cream/10 pb-16 pt-6 md:mt-[18vh] md:flex-row md:items-center md:justify-between md:pb-0">
+          <p className="text-[15px] text-cream/55">{footer.copyright}</p>
+          <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-cream/55">{footer.sign}</p>
+        </div>
       </div>
     </footer>
   );

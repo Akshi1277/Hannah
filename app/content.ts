@@ -178,6 +178,10 @@ export const contact = {
 
 export const footer = {
   lines: ["Where ideas take form.", "Design, print and packaging worldwide."],
+  signoff: ["Where ideas", "take form."],
+  strap: "Design, print and packaging worldwide.",
+  enquiriesNote: "Worldwide enquiries welcome.",
+  watermark: "Hannah",
   nav: [
     { label: "Home", href: "#top" },
     { label: "Capabilities", href: "#capabilities" },
