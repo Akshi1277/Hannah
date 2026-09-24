@@ -30,8 +30,9 @@ export default function Process() {
         </div>
       </div>
 
-      <div ref={ref} className="relative" style={{ height: `${n * 90}vh` }}>
+      <div ref={ref} className="relative" style={{ height: `${n * 65}vh` }}>
         <motion.div
+          data-pinned
           className="sticky top-0 h-screen overflow-hidden"
           animate={{ backgroundColor: BG[i] }}
           transition={{ duration: 0.9, ease: EASE }}
@@ -56,24 +57,41 @@ export default function Process() {
                   transition={{ duration: 0.6, ease: EASE }}
                 >
                   <p className={`label mb-4 ${dark ? "text-copper" : "text-copper"}`}>Stage {s.n}</p>
-                  <h3 className="display text-[clamp(56px,9vw,150px)]">{s.title}</h3>
+                  <h3 className="display text-[clamp(48px,6.2vw,112px)]">{s.title}</h3>
                   <p className={`mt-6 max-w-[420px] text-[16px] leading-relaxed md:text-[18px] ${dark ? "text-cream/75" : "text-ink-2"}`}>{s.body}</p>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            <div className="relative h-[38vh] self-center md:col-span-6 md:h-[70vh]">
-              <AnimatePresence mode="wait">
-                <motion.div
+            <div className="crop relative h-[38vh] self-center md:col-span-6 md:h-[64vh]">
+              <AnimatePresence mode="sync">
+                <motion.figure
                   key={i}
-                  className="absolute inset-0"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.03 }}
-                  transition={{ duration: 0.7, ease: EASE }}
+                  className="absolute inset-0 overflow-hidden"
+                  initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+                  animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.9, ease: EASE }}
                 >
-                  <StageVisual i={i} />
-                </motion.div>
+                  <motion.img
+                    src={STAGE_PHOTOS[i].src}
+                    alt={STAGE_PHOTOS[i].alt}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover"
+                    initial={{ scale: 1.08 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 1.8, ease: EASE }}
+                  />
+                  {/* Discover and Develop keep their pencil annotations over the paper */}
+                  {i < 2 && (
+                    <div className="absolute inset-0 p-[7%] opacity-80 mix-blend-multiply">
+                      <StageVisual i={i} />
+                    </div>
+                  )}
+                  <figcaption className="label absolute bottom-3 left-4 text-[10px] text-cream/85 [text-shadow:0_1px_6px_rgba(0,0,0,0.35)]">
+                    {process.stages[i].n} / {process.stages[i].title}
+                  </figcaption>
+                </motion.figure>
               </AnimatePresence>
             </div>
 
@@ -87,6 +105,16 @@ export default function Process() {
     </section>
   );
 }
+
+// Real footage stills (from the hero's Flow shots) for each stage.
+const STAGE_PHOTOS = [
+  { src: "/img/story/process-discover.jpg", alt: "A pencil dieline with measurements on cream specialty paper" },
+  { src: "/img/story/process-develop.jpg", alt: "A cream board blank folded up into a box structure" },
+  { src: "/img/story/process-refine.jpg", alt: "Copper foil sheets, specialty papers and a finished box on the studio table" },
+  { src: "/img/story/process-produce.jpg", alt: "A printed press sheet with registration marks, ink layers and a copper foil stripe" },
+  { src: "/img/story/process-finish.jpg", alt: "Close-up of a copper foil line and blind-embossed mark on a soft-touch box" },
+  { src: "/img/story/process-deliver.jpg", alt: "Finished packaging arranged as a still life by the studio window" },
+];
 
 const draw = (d = 0, dur = 1.4) => ({
   initial: { pathLength: 0, opacity: 0 },

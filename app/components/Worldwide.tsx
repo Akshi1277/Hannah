@@ -19,13 +19,16 @@ function arc([x1, y1]: [number, number], [x2, y2]: [number, number]) {
 export default function Worldwide() {
   const reduce = useReduce();
   return (
-    <section aria-labelledby="world-title" className="relative overflow-hidden bg-charcoal py-[16vh] text-cream">
+    <section aria-labelledby="world-title" className="relative bg-cream px-3 py-[8vh] md:px-[clamp(16px,2.5vw,40px)]">
+      {/* a printed charcoal sheet laid on the cream page, with its crop marks */}
+      <div className="crop relative">
+      <div className="relative overflow-hidden bg-charcoal py-[14vh] text-cream">
       <div className="gutter relative z-10 grid gap-10 md:grid-cols-12">
-        <div className="md:col-span-6">
+        <div className="md:col-span-7">
           <p className="label mb-8 flex items-center gap-3 text-cream/60">
             <RegMark className="h-3 w-3 text-copper" /> Sheet 06 — Delivery
           </p>
-          <MaskLines id="world-title" lines={worldwide.title} className="display text-[clamp(56px,10vw,180px)]" />
+          <MaskLines id="world-title" lines={worldwide.title} className="display text-[clamp(52px,8.4vw,156px)]" />
         </div>
         <FadeUp className="self-end md:col-span-4 md:col-start-9">
           <p className="text-[17px] leading-relaxed text-cream/75">{worldwide.body}</p>
@@ -97,6 +100,8 @@ export default function Worldwide() {
         <div className="gutter pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-end">
           <MaskLines lines={worldwide.message} as="p" className="display text-right text-[clamp(28px,4.4vw,72px)] text-cream" lineClassName="" />
         </div>
+      </div>
+      </div>
       </div>
     </section>
   );

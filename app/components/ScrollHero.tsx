@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cancelFrame, frame, motion, useMotionValue, useTransform, type MotionValue } from "framer-motion";
-import { brand, cta, hero } from "../content";
+import { brand, contactHref, cta, hero } from "../content";
 import { CtaButton, EASE, RegMark } from "./primitives";
 
 /** Must equal the number of JPEGs in /public/frames (verified on disk after extraction). */
@@ -202,7 +202,7 @@ export default function ScrollHero() {
       id="top"
       ref={containerRef}
       aria-label="Where ideas take form"
-      style={{ height: "500vh", position: "relative" }}
+      style={{ height: "380vh", position: "relative" }}
     >
       <div
         style={{
@@ -282,7 +282,7 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
           {hero.body}
         </motion.p>
         <motion.div {...mount(28, 1, 0.55)} className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-4">
-          <CtaButton href="#contact">{cta.primary}</CtaButton>
+          <CtaButton href={contactHref}>{cta.primary}</CtaButton>
           <a
             href="#capabilities"
             className="label group relative py-2 text-ink"
@@ -416,7 +416,7 @@ function FinalBeat({ p }: { p: MotionValue<number> }) {
           {hero.final.body}
         </p>
         <div className="mt-9 flex flex-col items-center gap-5 md:flex-row md:justify-center md:gap-8">
-          <CtaButton href="#contact" tone="light">
+          <CtaButton href={contactHref} tone="light">
             {cta.primary}
           </CtaButton>
           <a href={`mailto:${brand.email}`} className="label text-cream underline decoration-cream/40 underline-offset-8 hover:decoration-cream">

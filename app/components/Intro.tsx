@@ -34,14 +34,14 @@ export default function Intro() {
     >
       <motion.div
         style={{ rotateX: flap, transformOrigin: "50% 100%" }}
-        className="relative h-[18vh] bg-cream-2"
+        className="relative h-[18vh] bg-cream"
         aria-hidden="true"
       >
         <motion.div style={{ opacity: shade }} className="absolute inset-0 bg-gradient-to-b from-charcoal/60 to-transparent" />
         <Crease />
       </motion.div>
 
-      <div className="relative bg-cream-2 pb-[18vh] pt-[6vh]">
+      <div className="relative bg-cream pb-[14vh] pt-[6vh]">
         <div className="gutter">
           <div className="label mb-12 flex justify-between text-muted">
             <span>Sheet 01 — Idea</span>

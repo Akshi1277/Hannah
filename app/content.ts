@@ -23,11 +23,36 @@ export const brand = {
 };
 
 export const nav = [
-  { label: "Capabilities", href: "#capabilities" },
-  { label: "Process", href: "#process" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Capabilities", href: "/capabilities/" },
+  { label: "Process", href: "/process/" },
+  { label: "About", href: "/about/" },
+  { label: "Contact", href: "/contact/" },
 ];
+
+export const contactHref = "/contact/";
+
+// Per-page metadata for the dedicated pages.
+export const pages = {
+  capabilities: {
+    title: "Capabilities | Hannah Pixels",
+    description:
+      "Luxury packaging, product packaging, fragrance and beauty, chocolate and confectionery, paper and carry, and books and publishing — with the materials and finishes that bring them together.",
+  },
+  process: {
+    title: "Process | Hannah Pixels",
+    description:
+      "From first conversation to finished delivery: discover, develop, refine, produce, finish and deliver — and how a printed sheet is built, pass by pass.",
+  },
+  about: {
+    title: "About | Hannah Pixels",
+    description:
+      "Hannah Pixels was created to bring greater thought, craft and character to the way brands are experienced in the physical world.",
+  },
+  contact: {
+    title: "Start a Project | Hannah Pixels",
+    description: "Tell us about your product, your brand and what you have in mind. Enquiries worldwide.",
+  },
+};
 
 export const cta = {
   primary: "Start a project",
@@ -183,11 +208,11 @@ export const footer = {
   enquiriesNote: "Worldwide enquiries welcome.",
   watermark: "Hannah",
   nav: [
-    { label: "Home", href: "#top" },
-    { label: "Capabilities", href: "#capabilities" },
-    { label: "Process", href: "#process" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "Home", href: "/" },
+    { label: "Capabilities", href: "/capabilities/" },
+    { label: "Process", href: "/process/" },
+    { label: "About", href: "/about/" },
+    { label: "Contact", href: "/contact/" },
   ],
   copyright: "© 2026 Hannah Pixels. All rights reserved.",
   sign: "Design · Print · Packaging Worldwide.",

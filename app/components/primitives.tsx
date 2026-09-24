@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent } from "react";
+import Link from "next/link";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 
 export const EASE = [0.16, 1, 0.3, 1] as const;
@@ -79,9 +80,10 @@ export function CtaButton({
     light: "bg-cream text-ink border-cream hover:bg-cream-2",
     outline: "bg-transparent text-current border-current/40 hover:border-current",
   };
+  const Tag = href.startsWith("/") ? Link : "a";
   return (
     <Magnetic>
-      <a
+      <Tag
         href={href}
         onClick={onClick}
         className={`group inline-flex items-center gap-4 rounded-full border px-6 py-4 label !text-[12px] transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] ${tones[tone]} ${className}`}
@@ -91,7 +93,7 @@ export function CtaButton({
           <Arrow className="absolute transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-6" />
           <Arrow className="absolute -translate-x-6 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
         </span>
-      </a>
+      </Tag>
     </Magnetic>
   );
 }
@@ -123,7 +125,7 @@ export function MaskLines({
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
     >
       {lines.map((l, i) => (
-        <span key={i} className="block overflow-hidden pb-[0.06em]">
+        <span key={i} className="block overflow-y-clip pb-[0.06em]">
           <motion.span
             className={`block ${lineClassName}`}
             variants={{ hidden: { y: "105%" }, shown: { y: "0%" } }}

@@ -104,80 +104,94 @@ function EmbossTile({ className }: { className?: string }) {
   );
 }
 
-/** A folded corner closes as it scrolls into view. */
-function FoldCorner({ className }: { className?: string }) {
+/** A photographic close-up that settles into place when it enters view. */
+function PhotoTile({
+  src,
+  alt,
+  label,
+  title,
+  className,
+  snap = false,
+  children,
+}: {
+  src: string;
+  alt: string;
+  label: string;
+  title: string;
+  className?: string;
+  snap?: boolean;
+  children?: React.ReactNode;
+}) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.6 });
-  return (
-    <Tile label="Premium wrapping" title="Folded corner" className={className}>
-      <div ref={ref} className="absolute inset-0 flex items-center justify-center" style={{ perspective: 800 }}>
-        <div className="relative h-44 w-44 bg-[#CFC5B2] shadow-[0_24px_40px_-24px_rgba(42,38,34,0.6)]">
-          <div className="absolute inset-3 border border-ink/10" />
-          <motion.div
-            className="absolute right-0 top-0 h-20 w-20 origin-bottom-left bg-[#B7AB94]"
-            style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%)", transformOrigin: "0% 0%" }}
-            initial={false}
-            animate={{ rotateY: inView ? 0 : -150, rotateX: inView ? 0 : 20 }}
-            transition={{ duration: 1.4, ease: EASE }}
-          />
-          <motion.div
-            className="absolute right-0 top-0 h-20 w-20 bg-cream-2"
-            style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%)" }}
-            initial={false}
-            animate={{ opacity: inView ? 0 : 1 }}
-            transition={{ duration: 0.4, delay: inView ? 0.6 : 0 }}
-          />
-        </div>
-      </div>
-    </Tile>
-  );
-}
-
-/** A magnetic lid that snaps shut when seen. */
-function MagneticBox({ className }: { className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.7 });
+  const inView = useInView(ref, { amount: 0.5, once: true });
   const reduce = useReduce();
   return (
-    <Tile label="Magnetic closure" title="Bespoke construction" className={className}>
-      <div ref={ref} className="absolute inset-0 flex items-center justify-center">
-        <div className="relative h-32 w-48">
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-[#3A342E]" />
-          <div className="absolute inset-x-3 bottom-[88px] h-2 bg-[#2A2622]" />
-          <motion.div
-            className="absolute inset-x-0 bottom-0 h-24 origin-top bg-[#4A423A] shadow-[0_-1px_0_rgba(255,255,255,0.08)_inset]"
-            initial={false}
-            animate={inView ? { y: 0, rotate: 0 } : { y: -58, rotate: -8 }}
-            transition={reduce ? { duration: 0 } : inView ? { type: "spring", stiffness: 700, damping: 16, mass: 0.6, delay: 0.3 } : { duration: 0.6 }}
-            style={{ transformOrigin: "0% 0%" }}
-          >
-            <span className="absolute left-1/2 top-3 h-px w-12 -translate-x-1/2 bg-copper" />
-          </motion.div>
-        </div>
+    <Tile label={label} title={title} className={className}>
+      <div ref={ref} className="absolute inset-0 overflow-hidden">
+        <motion.img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="h-full w-full object-cover"
+          initial={false}
+          animate={{ scale: inView || reduce ? 1 : 1.12, y: inView || reduce ? 0 : snap ? -18 : 0 }}
+          transition={
+            snap && !reduce
+              ? { type: "spring", stiffness: 520, damping: 14, mass: 0.7, delay: 0.15 } // the magnetic "snap"
+              : { duration: 1.6, ease: EASE }
+          }
+        />
+        {children}
       </div>
     </Tile>
   );
 }
 
-/** A die-cut edge travelling through with scroll. */
+function FoldCorner({ className }: { className?: string }) {
+  return (
+    <PhotoTile
+      className={className}
+      src="/img/story/detail-wrap.jpg"
+      alt="Soft-touch paper being wrapped around a rigid box, corners folding into place"
+      title="Premium wrapping"
+      label="Wrapped board"
+    />
+  );
+}
+
+function MagneticBox({ className }: { className?: string }) {
+  return (
+    <PhotoTile
+      className={className}
+      src="/img/story/detail-magnetic.jpg"
+      alt="Close-up of a copper magnetic closure and copper foil line on a stone-grey box"
+      title="Magnetic closure"
+      label="Bespoke construction"
+      snap
+    />
+  );
+}
+
+/** A die-cut edge travelling through with scroll, over the dieline it was cut from. */
 function DieCut({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const scrollYProgress = useProgress(ref, THROUGH);
-  const x = useTransform(scrollYProgress, [0, 1], ["10%", "-40%"]);
+  const p = useProgress(ref, THROUGH);
+  const x = useTransform(p, [0, 1], ["10%", "-40%"]);
+  const edge = `M0 120 ${Array.from({ length: 20 }).map((_, k) => `Q${k * 60 + 30} ${k % 2 ? 60 : 180} ${k * 60 + 60} 120`).join(" ")}`;
   return (
-    <Tile label="Custom die-cut" title="Die-cut shapes" className={className}>
-      <div ref={ref} className="absolute inset-0 overflow-hidden">
-        <motion.svg style={{ x }} viewBox="0 0 1200 300" className="absolute top-1/2 h-40 w-[260%] -translate-y-1/2" aria-hidden="true">
-          <path
-            d={`M0 120 ${Array.from({ length: 20 }).map((_, k) => `Q${k * 60 + 30} ${k % 2 ? 60 : 180} ${k * 60 + 60} 120`).join(" ")} V300 H0Z`}
-            fill="#E1D5BD"
-          />
-          <path
-            d={`M0 120 ${Array.from({ length: 20 }).map((_, k) => `Q${k * 60 + 30} ${k % 2 ? 60 : 180} ${k * 60 + 60} 120`).join(" ")}`}
-            fill="none" stroke="#A66A46" strokeWidth="1.2" strokeDasharray="6 4"
-          />
+    <PhotoTile
+      className={className}
+      src="/img/story/detail-diecut.jpg"
+      alt="A pencil dieline with measurements and a knife-cut edge on specialty paper"
+      title="Die-cut shapes"
+      label="Custom die-cut"
+    >
+      <div ref={ref} className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 overflow-hidden">
+        <motion.svg style={{ x }} viewBox="0 0 1200 300" className="absolute bottom-0 h-40 w-[260%]" aria-hidden="true">
+          <path d={`${edge} V300 H0Z`} fill="#F3EEE4" />
+          <path d={edge} fill="none" stroke="#A66A46" strokeWidth="1.2" strokeDasharray="6 4" />
         </motion.svg>
       </div>
-    </Tile>
+    </PhotoTile>
   );
 }

@@ -1,21 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, JetBrains_Mono, Cormorant_Garamond } from "next/font/google";
+import { Manrope, JetBrains_Mono } from "next/font/google";
 import Providers from "./components/Providers";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
+import FloatingCta from "./components/FloatingCta";
+import Cursor from "./components/Cursor";
 import { brand } from "./content";
 import "./globals.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
-  display: "swap",
-});
-
-// Editorial serif, used sparingly: the footer sign-off and HANNAH watermark.
-const serif = Cormorant_Garamond({
-  subsets: ["latin"],
-  variable: "--font-cormorant",
-  weight: ["300", "400"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -79,13 +74,19 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${manrope.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${mono.variable}`}>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Providers>{children}</Providers>
+        <Providers>
+          <Nav />
+          {children}
+          <Footer />
+          <FloatingCta />
+          <Cursor />
+        </Providers>
       </body>
     </html>
   );

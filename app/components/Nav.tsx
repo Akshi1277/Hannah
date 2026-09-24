@@ -1,15 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent } from "framer-motion";
-import { brand, cta, nav } from "../content";
+import { brand, contactHref, cta, nav } from "../content";
 import { Arrow, EASE } from "./primitives";
+import { floatingCta } from "./FloatingCta";
 import { useScrollY } from "./useProgress";
+
+const MotionLink = motion.create(Link);
 
 export default function Nav() {
   const scrollY = useScrollY();
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
+  const floatingShown = useSyncExternalStore(floatingCta.subscribe, floatingCta.get, () => false);
+  const pathname = usePathname() || "/";
+  const isActive = (href: string) => pathname.replace(/\/?$/, "/") === href;
 
   useMotionValueEvent(scrollY, "change", (v) => setCompact(v > 80));
 
@@ -41,13 +49,13 @@ export default function Nav() {
               : { marginTop: 0, paddingTop: 26, paddingBottom: 26, maxWidth: 2400 }
           }
           transition={{ duration: 0.7, ease: EASE }}
-          className={`pointer-events-auto flex w-full items-center justify-between gap-6 transition-[background-color,border-color,box-shadow,border-radius] duration-700 ${
+          className={`pointer-events-auto flex w-full items-center justify-between gap-6 md:grid md:grid-cols-[1fr_auto_1fr] transition-[background-color,border-color,box-shadow,border-radius] duration-700 ${
             compact
               ? "mx-3 rounded-full border border-hair bg-cream/95 px-5 shadow-[0_10px_40px_-20px_rgba(42,38,34,0.45)] md:px-6"
               : "gutter rounded-none border border-transparent bg-transparent"
           }`}
         >
-          <a href="#top" aria-label={`${brand.name} — home`} className="block shrink-0">
+          <Link href="/" aria-label={`${brand.name} — home`} className="block shrink-0">
             <img
               src={brand.logo.dark}
               alt={brand.name}
@@ -55,26 +63,44 @@ export default function Nav() {
               height={36}
               className={`w-auto transition-[height] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${compact ? "h-9" : "h-11 md:h-14"}`}
             />
-          </a>
+          </Link>
 
           <ul className="hidden items-center gap-8 md:flex">
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href} className="label group relative py-2 text-ink-2 transition-colors hover:text-ink">
+                <Link
+                  href={n.href}
+                  aria-current={isActive(n.href) ? "page" : undefined}
+                  className={`label group relative py-2 transition-colors hover:text-ink ${isActive(n.href) ? "text-ink" : "text-ink-2"}`}
+                >
                   {n.label}
-                  <span className="absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-copper transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:origin-left group-hover:scale-x-100" />
-                </a>
+                  <span
+                    className={`absolute -bottom-0.5 left-0 h-px w-full bg-copper transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      isActive(n.href) ? "origin-left scale-x-100" : "origin-right scale-x-0 group-hover:origin-left group-hover:scale-x-100"
+                    }`}
+                  />
+                </Link>
               </li>
             ))}
           </ul>
 
-          <a
-            href="#contact"
-            className="label group hidden items-center gap-3 rounded-full bg-ink px-5 py-3 text-cream transition-colors hover:bg-copper md:inline-flex"
-          >
-            {cta.primary}
-            <Arrow className="transition-transform duration-500 group-hover:translate-x-1" />
-          </a>
+          {/* folds away while the floating CTA is on screen: one "Start a project" at a time */}
+          <AnimatePresence initial={false}>
+            {!floatingShown && (
+              <MotionLink
+                key="nav-cta"
+                href={contactHref}
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.5, ease: EASE }}
+                className="label group hidden shrink-0 items-center gap-3 overflow-hidden whitespace-nowrap rounded-full bg-ink px-5 py-3 text-cream transition-colors hover:bg-copper md:inline-flex md:justify-self-end"
+              >
+                {cta.primary}
+                <Arrow className="transition-transform duration-500 group-hover:translate-x-1" />
+              </MotionLink>
+            )}
+          </AnimatePresence>
 
           <button
             type="button"
@@ -118,7 +144,7 @@ export default function Nav() {
             <ul className="gutter relative mt-8 flex flex-1 flex-col justify-center gap-2">
               {nav.map((n, i) => (
                 <li key={n.href} className="overflow-hidden">
-                  <motion.a
+                  <MotionLink
                     href={n.href}
                     onClick={() => setOpen(false)}
                     className="display flex items-baseline gap-4 py-1 text-[clamp(36px,11vw,96px)]"
@@ -128,7 +154,7 @@ export default function Nav() {
                   >
                     <span className="label text-copper">0{i + 1}</span>
                     {n.label}
-                  </motion.a>
+                  </MotionLink>
                 </li>
               ))}
             </ul>

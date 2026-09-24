@@ -18,9 +18,18 @@ export default function Standard() {
   const p = useProgress(ref, PIN);
   const n = standard.principles.length;
   const [i, setI] = useState(0);
-  useEffect(() => p.on("change", (v) => setI(Math.min(n - 1, Math.floor(v * n)))), [p, n]);
+  const [outro, setOutro] = useState(false);
+  useEffect(
+    () =>
+      p.on("change", (v) => {
+        setI(Math.min(n - 1, Math.floor((v / 0.92) * n)));
+        setOutro(v > 0.93);
+      }),
+    [p, n],
+  );
   const s = standard.principles[i];
-  const t = THEMES[i];
+  // In the last stretch the page returns to cream, so the section hands over without a seam.
+  const t = outro ? { ...THEMES[i], bg: THEMES[0].bg, fg: THEMES[0].fg, sub: THEMES[0].sub } : THEMES[i];
 
   return (
     <section aria-labelledby="standard-title" className="relative bg-cream">
@@ -29,8 +38,9 @@ export default function Standard() {
         <MaskLines id="standard-title" lines={standard.title} className="display text-[clamp(48px,8vw,140px)] text-ink" />
       </div>
 
-      <div ref={ref} style={{ height: `${n * 100}vh` }} className="relative">
+      <div ref={ref} style={{ height: `${n * 70 + 40}vh` }} className="relative">
         <motion.div
+          data-pinned
           className="sticky top-0 flex h-screen flex-col justify-between overflow-hidden"
           animate={{ backgroundColor: t.bg, color: t.fg }}
           transition={{ duration: 0.9, ease: EASE }}

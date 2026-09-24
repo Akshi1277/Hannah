@@ -69,7 +69,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="relative bg-cream-2 pb-[14vh] pt-[18vh]">
+    <section id="contact" aria-labelledby="contact-title" className="relative bg-cream pb-[14vh] pt-[16vh]">
       <div className="gutter">
         <p className="label mb-10 flex items-center gap-3 text-ink-2">
           <RegMark className="h-3 w-3" /> Contact — Start a project

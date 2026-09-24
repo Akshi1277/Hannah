@@ -5,8 +5,9 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motio
 import { capabilities, capabilitiesIntro } from "../content";
 import ObjectVisual from "./ObjectVisual";
 import { Arrow, EASE, FadeUp, MaskLines, SectionLabel, useReduce } from "./primitives";
+import { MoreLink } from "./HomePreviews";
 
-export default function Capabilities() {
+export default function Capabilities({ more = false }: { more?: boolean }) {
   const [active, setActive] = useState<number | null>(null);
   const [open, setOpen] = useState<number | null>(0); // mobile accordion
   const listRef = useRef<HTMLDivElement>(null);
@@ -164,6 +165,11 @@ export default function Capabilities() {
           </AnimatePresence>
         </motion.div>
       </div>
+      {more && (
+        <div className="gutter mt-10">
+          <MoreLink href="/capabilities/">Materials, finishes and details</MoreLink>
+        </div>
+      )}
     </section>
   );
 }

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useTransform, type MotionValue } from "framer-motion";
+import { AnimatePresence, motion, useTransform } from "framer-motion";
 import { materials, materialsIntro, type MaterialKind } from "../content";
 import { EASE, FadeUp, MaskLines, RegMark, useReduce } from "./primitives";
 import { useProgress, PIN } from "./useProgress";
 
 export default function Materials() {
   return (
-    <section id="materials" aria-labelledby="mat-title" className="relative bg-cream-2">
+    <section id="materials" aria-labelledby="mat-title" className="relative bg-cream">
       <div className="gutter pt-[16vh]">
         <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-7">
@@ -286,52 +286,74 @@ function MaterialToPackaging() {
   const [idx, setIdx] = useState(0);
   useEffect(() => stage.on("change", (v) => setIdx(Math.min(4, Math.round(v)))), [stage]);
 
-  // 0 → 1: texture fills the frame, then shrinks into a flat sheet
-  const sheetScale = useTransform(p, [0, 0.18], [reduce ? 1 : 2.4, 1]);
-  const textureOpacity = useTransform(p, [0.1, 0.3], [1, 0.25]);
-  // 1 → 2: dieline draws
+  // 0 → 1: the paper from the opening shot fills the frame, then is cropped down to a sheet
+  const paperClip = useTransform(p, [0.02, 0.17], ["inset(0% 0% 0% 0%)", "inset(30% 36% 30% 36%)"]);
+  const paperOpacity = useTransform(p, [0.13, 0.2], [1, 0]);
+  const paperScale = useTransform(p, [0, 0.17], reduce ? [1, 1] : [1.08, 1]);
+  const netOpacity = useTransform(p, [0.12, 0.19, 0.74, 0.82], [0, 1, 1, 0]);
+  // 1 → 2: dieline draws on the flat sheet
   const dieline = useTransform(p, [0.2, 0.4], [0, 1]);
-  // 2 → 3: flaps fold up
+  const dielineFade = useTransform(p, [0.42, 0.52], [1, 0]); // the flat outline leaves as walls rise
+  // 2 → 3: walls fold up
   const fold = useTransform(p, [0.4, 0.62], [0, 90]);
   const foldNeg = useTransform(fold, (v) => -v);
   const tilt = useTransform(p, [0.3, 0.6], reduce ? [55, 55] : [0, 55]);
   const spin = useTransform(p, [0.3, 0.75], reduce ? [-40, -40] : [0, -40]);
-  const netOpacity = useTransform(p, [0.74, 0.82], [1, 0]);
-  // 3 → 4: finished packaging photograph
+  // 3 → 4: the finished box, the same object as the hero
   const photo = useTransform(p, [0.74, 0.86], [0, 1]);
-  const photoScale = useTransform(p, [0.74, 1], [1.12, 1]);
+  const photoScale = useTransform(p, [0.74, 1], [1.1, 1]);
 
   return (
-    <div ref={ref} className="relative" style={{ height: "420vh" }}>
-      <div className="sticky top-0 flex h-screen flex-col overflow-hidden bg-cream-2">
-        <div className="gutter flex items-center justify-between pt-24 md:pt-28">
+    <div ref={ref} className="relative" style={{ height: "300vh" }}>
+      <div className="sticky top-0 flex h-screen flex-col overflow-hidden bg-cream" data-pinned>
+        <div className="gutter relative z-10 flex items-center justify-between pt-24 md:pt-28">
           <p className="label text-ink-2">Material → Packaging</p>
           <p className="label text-muted">0{idx + 1} / 05</p>
         </div>
 
+        {/* opening: full-bleed paper, cropped down toward the sheet */}
+        <motion.div
+          aria-hidden="true"
+          style={{ clipPath: paperClip, opacity: paperOpacity }}
+          className="pointer-events-none absolute inset-0"
+        >
+          <motion.img
+            src="/img/story/packaging-paper.jpg"
+            alt=""
+            loading="lazy"
+            style={{ scale: paperScale }}
+            className="h-full w-full object-cover"
+          />
+        </motion.div>
+
         <div className="relative flex flex-1 items-center justify-center" style={{ perspective: "1400px" }}>
           <motion.div
-            style={{ scale: sheetScale, rotateX: tilt, rotateZ: spin, transformStyle: "preserve-3d" }}
+            style={{ rotateX: tilt, rotateZ: spin, opacity: netOpacity, transformStyle: "preserve-3d" }}
             className="relative h-[34vmin] w-[34vmin]"
           >
-            <motion.div style={{ opacity: netOpacity, transformStyle: "preserve-3d" }} className="absolute inset-0">
+            <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
               {/* base panel */}
-              <Panel texture={textureOpacity} />
+              <Panel />
               {/* four walls hinged on the base edges */}
               <motion.div className="absolute bottom-full left-0 h-[55%] w-full origin-bottom" style={{ rotateX: foldNeg, transformStyle: "preserve-3d" }}>
-                <Panel texture={textureOpacity} />
+                <Panel />
               </motion.div>
               <motion.div className="absolute left-0 top-full h-[55%] w-full origin-top" style={{ rotateX: fold, transformStyle: "preserve-3d" }}>
-                <Panel texture={textureOpacity} />
+                <Panel />
               </motion.div>
               <motion.div className="absolute right-full top-0 h-full w-[55%] origin-right" style={{ rotateY: fold, transformStyle: "preserve-3d" }}>
-                <Panel texture={textureOpacity} />
+                <Panel />
               </motion.div>
               <motion.div className="absolute left-full top-0 h-full w-[55%] origin-left" style={{ rotateY: foldNeg, transformStyle: "preserve-3d" }}>
-                <Panel texture={textureOpacity} />
+                <Panel />
               </motion.div>
               {/* dieline drawn over the flat net */}
-              <svg className="pointer-events-none absolute -inset-[55%] h-[210%] w-[210%] overflow-visible" viewBox="0 0 210 210" aria-hidden="true">
+              <motion.svg
+                style={{ opacity: dielineFade }}
+                className="pointer-events-none absolute -inset-[55%] h-[210%] w-[210%] overflow-visible"
+                viewBox="0 0 210 210"
+                aria-hidden="true"
+              >
                 <motion.path
                   d="M55 55 H155 V155 H55Z"
                   fill="none" stroke="#A66A46" strokeWidth="0.6" strokeDasharray="3 2"
@@ -342,14 +364,14 @@ function MaterialToPackaging() {
                   fill="none" stroke="#171717" strokeWidth="0.6"
                   style={{ pathLength: dieline }}
                 />
-              </svg>
-            </motion.div>
+              </motion.svg>
+            </div>
           </motion.div>
 
           <motion.div style={{ opacity: photo }} className="pointer-events-none absolute inset-0">
             <motion.img
-              src="/img/k3.jpg"
-              alt="Finished rigid box wrapped in stone-grey soft-touch paper with a copper foil line and blind-embossed mark"
+              src="/img/story/packaging-finished.jpg"
+              alt="The finished rigid box: stone-grey soft-touch wrap, a copper foil line, a blind-embossed mark and a copper magnetic closure"
               loading="lazy"
               style={{ scale: photoScale }}
               className="h-full w-full object-cover"
@@ -357,7 +379,7 @@ function MaterialToPackaging() {
           </motion.div>
         </div>
 
-        <ol className="gutter grid grid-cols-5 gap-2 pb-10 md:gap-6 md:pb-14">
+        <ol className="gutter relative z-10 grid grid-cols-5 gap-2 pb-10 md:gap-6 md:pb-14">
           {materialsIntro.journey.map((j, i) => (
             <li key={j} className="relative">
               <span className="block h-px w-full bg-ink/15">
@@ -368,7 +390,7 @@ function MaterialToPackaging() {
                   transition={{ duration: 0.6, ease: EASE }}
                 />
               </span>
-              <span className={`label mt-3 block text-[9px] transition-colors md:text-[11px] ${i === idx ? (idx === 4 ? "text-cream" : "text-ink") : "text-muted"}`}>
+              <span className={`label mt-3 block text-[9px] transition-colors md:text-[11px] ${i === idx ? (idx === 4 ? "text-cream" : "text-ink") : idx === 4 ? "text-cream/60" : "text-muted"}`}>
                 <span className="hidden md:inline">0{i + 1} </span>
                 {j}
               </span>
@@ -380,17 +402,12 @@ function MaterialToPackaging() {
   );
 }
 
-function Panel({ texture }: { texture: MotionValue<number> }) {
+function Panel() {
+  // Flat folding-board colour; the site-wide paper grain supplies the texture.
   return (
-    <div className="absolute inset-0 bg-[#E9DFCB] shadow-[inset_0_0_0_0.5px_rgba(23,23,23,0.35)]" style={{ backfaceVisibility: "visible" }}>
-      <motion.div
-        style={{
-          opacity: texture,
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.9 0.3' numOctaves='3'/><feDiffuseLighting surfaceScale='1.2' lighting-color='%23fff6e8'><feDistantLight azimuth='225' elevation='40'/></feDiffuseLighting></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>\")",
-        }}
-        className="absolute inset-0 mix-blend-multiply"
-      />
-    </div>
+    <div
+      className="absolute inset-0 shadow-[inset_0_0_0_0.5px_rgba(23,23,23,0.3)]"
+      style={{ background: "linear-gradient(135deg, #EFE6D4 0%, #E6DCC8 100%)", backfaceVisibility: "visible" }}
+    />
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 declare global {
@@ -24,5 +25,14 @@ export default function SmoothScroll() {
       window.__lenis = undefined;
     };
   }, []);
+  // New page: start at the top, and let Lenis re-measure the new content height.
+  const pathname = usePathname();
+  useEffect(() => {
+    const lenis = window.__lenis;
+    if (!lenis) return;
+    lenis.scrollTo(0, { immediate: true, force: true });
+    lenis.resize();
+  }, [pathname]);
+
   return null;
 }

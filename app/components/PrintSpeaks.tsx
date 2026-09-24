@@ -55,9 +55,9 @@ export default function PrintSpeaks() {
   );
 
   return (
-    <section aria-labelledby="print-title" className="relative bg-[#E9E1D0]">
-      <div ref={ref} className="relative" style={{ height: "480vh" }}>
-        <div className="sticky top-0 flex h-screen flex-col overflow-hidden md:flex-row">
+    <section aria-labelledby="print-title" className="relative bg-cream">
+      <div ref={ref} className="relative" style={{ height: "340vh" }}>
+        <div data-pinned className="sticky top-0 flex h-screen flex-col overflow-hidden md:flex-row">
           <div className="gutter relative z-10 flex flex-col justify-between pb-4 pt-24 md:w-[34%] md:py-[14vh]">
             <div>
               <p className="label mb-6 flex items-center gap-3 text-ink-2">
@@ -86,7 +86,7 @@ export default function PrintSpeaks() {
           <div className="relative flex flex-1 items-center justify-center px-4 pb-8 md:px-10 md:pb-0">
             <motion.div
               style={{ rotate: sheetRotate, y: sheetY, clipPath: cropInset }}
-              className="relative aspect-[3/2] w-full max-w-[1100px] bg-[#F6F1E6] shadow-[0_40px_80px_-40px_rgba(42,38,34,0.55)]"
+              className="relative aspect-[3/2] w-full max-w-[1100px] bg-[#FAF6EE] shadow-[0_40px_80px_-40px_rgba(42,38,34,0.55)]"
             >
               <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full" role="img" aria-label="A printed sheet being built up pass by pass: two ink layers, typography, copper foil and a blind emboss.">
                 <defs>

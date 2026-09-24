@@ -14,7 +14,6 @@
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
 
   --ease-paper: cubic-bezier(0.16, 1, 0.3, 1);
 }

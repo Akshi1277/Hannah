@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { brand, capabilities, footer } from "../content";
 import { EASE } from "./primitives";
 
@@ -10,10 +11,10 @@ const link = "text-[17px] text-cream/85 transition-colors duration-300 hover:tex
 export default function Footer() {
   return (
     <footer className="relative isolate overflow-hidden bg-[#141210] text-cream">
-      {/* HANNAH watermark: a light serif, barely lifted off the page and cut by the bottom edge */}
+      {/* HANNAH watermark: the site display face, barely lifted off the page and cut by the bottom edge */}
       <motion.p
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 select-none whitespace-nowrap text-center font-[family-name:var(--font-serif)] text-[clamp(64px,21.5vw,460px)] font-light uppercase leading-[0.8] tracking-[0.03em] text-cream/[0.045]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 select-none whitespace-nowrap display text-center text-[clamp(64px,24vw,520px)] text-cream/[0.05]"
         initial={{ opacity: 0, y: "55%" }}
         whileInView={{ opacity: 1, y: "40%" }}
         viewport={{ once: true }}
@@ -27,10 +28,10 @@ export default function Footer() {
           {/* sign-off */}
           <div className="lg:col-span-4 lg:pr-10">
             <img src={brand.logo.light} alt={brand.name} width={165} height={60} className="mb-10 h-11 w-auto opacity-90" loading="lazy" />
-            <p className="font-[family-name:var(--font-serif)] text-[clamp(44px,4.4vw,68px)] font-light leading-[1.02]">
+            <p className="display text-[clamp(40px,4.2vw,64px)]">
               {footer.signoff[0]}
               <br />
-              <em className="text-[#C39A6B]">{footer.signoff[1]}</em>
+              <span className="text-copper">{footer.signoff[1]}</span>
             </p>
             <p className="mt-8 text-[17px] text-cream/65">{footer.strap}</p>
           </div>
@@ -41,7 +42,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footer.nav.map((n) => (
                 <li key={n.href}>
-                  <a href={n.href} className={link}>{n.label}</a>
+                  <Link href={n.href} className={link}>{n.label}</Link>
                 </li>
               ))}
             </ul>
@@ -53,7 +54,7 @@ export default function Footer() {
             <ul className="grid grid-cols-2 gap-x-6 gap-y-3">
               {capabilities.map((c) => (
                 <li key={c.n}>
-                  <a href="#capabilities" className={`${link} leading-snug`}>{c.title}</a>
+                  <Link href="/capabilities/" className={`${link} leading-snug`}>{c.title}</Link>
                 </li>
               ))}
             </ul>
@@ -62,7 +63,7 @@ export default function Footer() {
           {/* enquiries */}
           <div className="lg:col-span-3 lg:border-l lg:border-cream/10 lg:pl-8 lg:pl-12">
             <p className={colLabel}>Enquiries</p>
-            <a href={`mailto:${brand.email}`} className="block whitespace-nowrap text-[17px] text-[#C39A6B] transition-colors hover:text-cream">
+            <a href={`mailto:${brand.email}`} className="block whitespace-nowrap text-[17px] text-[#CF9A72] transition-colors hover:text-cream">
               {brand.email}
             </a>
             <a href={brand.phoneHref} className={`${link} mt-2 block`}>{brand.phone}</a>
