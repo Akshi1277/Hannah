@@ -327,12 +327,13 @@ function MaterialToPackaging() {
   const embossScale = useTransform(p, [0.72, 0.78], [1.25, 1]);
   const magnet = useTransform(p, [0.76, 0.8], [0, 1]);
   // the finished drawing steps aside for the photographed piece
-  const boxX = useTransform(p, [0.82, 0.92], wide ? ["0vw", "-17vw"] : ["0vw", "0vw"]);
+  const boxX = useTransform(p, [0.82, 0.92], wide ? ["0vw", "-14vw"] : ["0vw", "0vw"]);
   const boxY = useTransform(p, [0.82, 0.92], wide ? ["0vh", "0vh"] : ["0vh", "-14vh"]);
   const boxScale = useTransform(p, [0.82, 0.92], [1, wide ? 0.92 : 0.78]);
   const plate = useTransform(p, [0.84, 0.94], ["inset(0% 0% 100% 0%)", "inset(0% 0% 0% 0%)"]);
   const plateOpacity = useTransform(p, [0.84, 0.88], [0, 1]);
   const plateY = useTransform(p, [0.84, 0.96], reduce ? [0, 0] : [24, 0]);
+  const groundShadow = useTransform(p, [0.4, 0.62], [0, 1]);
 
   return (
     <div ref={ref} className="relative" style={{ height: "340vh" }}>
@@ -358,7 +359,13 @@ function MaterialToPackaging() {
         </motion.div>
 
         <div className="relative flex flex-1 items-center justify-center" style={{ perspective: "1400px" }}>
-          <motion.div style={{ x: boxX, y: boxY, scale: boxScale, transformStyle: "preserve-3d" }} className="relative">
+          <motion.div style={{ x: boxX, y: boxY, scale: boxScale, perspective: "1400px" }} className="relative">
+            {/* contact shadow: grounds the drawn box on the page like the photographed one on its table */}
+            <motion.span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-1/2 block h-[16vmin] w-[62vmin] -translate-x-1/2 translate-y-[10%] rounded-[50%]"
+              style={{ opacity: groundShadow, background: "radial-gradient(closest-side, rgba(42,38,34,0.32), rgba(42,38,34,0.12) 55%, rgba(42,38,34,0) 100%)" }}
+            />
             <motion.div
               role="img"
               aria-label="A flat board folds into a tray, a lid drops on, and it becomes a stone-grey rigid box with a copper foil line, an embossed mark and a copper magnetic closure."
@@ -406,14 +413,12 @@ function MaterialToPackaging() {
                     className="absolute left-0 right-0 top-[64%] block h-[2.2%] origin-left"
                     style={{ scaleX: foil, background: "linear-gradient(90deg,#8A5234,#E6B58C 45%,#A66A46 60%,#7A4428)" }}
                   />
-                  <motion.span
-                    className="absolute left-[38%] top-[26%] block h-[20%] w-[24%] border border-[#8F8472]"
-                    style={{
-                      opacity: emboss,
-                      scale: embossScale,
-                      boxShadow: "inset 1.5px 1.5px 0 rgba(255,255,255,0.35), inset -1.5px -1.5px 0 rgba(0,0,0,0.18), 1px 1px 0 rgba(255,255,255,0.25)",
-                    }}
-                  />
+                  {/* blind emboss: the Hannah Pixels monogram, shown only by a light and a shadow edge */}
+                  <motion.span className="absolute left-[39%] top-[16%] block h-[34%] w-[22%]" style={{ opacity: emboss, scale: embossScale }}>
+                    <span className="absolute inset-0 block" style={{ ...MONOGRAM_MASK, background: "rgba(255,255,255,0.5)", transform: "translate(-0.9px,-0.9px)" }} />
+                    <span className="absolute inset-0 block" style={{ ...MONOGRAM_MASK, background: "rgba(40,32,24,0.32)", transform: "translate(0.9px,0.9px)" }} />
+                    <span className="absolute inset-0 block" style={{ ...MONOGRAM_MASK, background: "rgba(40,32,24,0.06)" }} />
+                  </motion.span>
                   {/* skirts */}
                   <motion.div className="absolute bottom-full left-0 h-[20%] w-full origin-bottom" style={{ rotateX: 90 }}>
                     <Panel color={board} shade={0.04} />
@@ -440,7 +445,7 @@ function MaterialToPackaging() {
           {/* the real piece: the same box, photographed, laid beside the drawing as a plate */}
           <motion.figure
             style={{ clipPath: plate, opacity: plateOpacity, y: plateY }}
-            className="crop absolute bottom-[3vh] left-[9vw] w-[82vw] md:bottom-auto md:left-auto md:right-[7vw] md:top-[18%] md:w-[36vw]"
+            className="crop absolute bottom-[3vh] left-1/2 w-[min(82vw,calc((100vh-440px)*1.3))] -translate-x-1/2 md:bottom-auto md:left-auto md:right-[9vw] md:top-1/2 md:w-[min(34vw,calc((100vh-330px)*1.3))] md:translate-x-0 md:-translate-y-1/2"
           >
             <img
               src="/img/story/packaging-finished.jpg"
@@ -448,7 +453,7 @@ function MaterialToPackaging() {
               loading="lazy"
               className="aspect-[4/3] w-full object-cover shadow-[0_30px_60px_-30px_rgba(42,38,34,0.55)]"
             />
-            <figcaption className="label mt-3 flex justify-between text-[10px] text-ink-2">
+            <figcaption className="label mt-3 flex justify-between gap-4 whitespace-nowrap text-[10px] text-ink-2">
               <span>05 · Finished piece</span>
               <span className="text-muted">Photographed</span>
             </figcaption>
@@ -477,6 +482,17 @@ function MaterialToPackaging() {
     </div>
   );
 }
+
+const MONOGRAM_MASK = {
+  WebkitMaskImage: "url(/brand/mark-white.png)",
+  maskImage: "url(/brand/mark-white.png)",
+  WebkitMaskSize: "contain",
+  maskSize: "contain",
+  WebkitMaskRepeat: "no-repeat",
+  maskRepeat: "no-repeat",
+  WebkitMaskPosition: "center",
+  maskPosition: "center",
+} as const;
 
 function Panel({ color, shade = 0, lid = false }: { color: MotionValue<string>; shade?: number; lid?: boolean }) {
   // Board colour animates cream → stone-grey; a fixed shade per face keeps the 3D form readable.
