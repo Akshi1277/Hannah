@@ -105,6 +105,8 @@ function MaterialField() {
   }, [reduce]);
 
   const current = materials.find((x) => x.id === m)!;
+  // Leather and blind-emboss render dark: their caption switches to cream.
+  const darkSurface = m === "leather" || m === "emboss";
 
   return (
     <div className="gutter py-[12vh]">
@@ -155,16 +157,16 @@ function MaterialField() {
           </AnimatePresence>
           <div
             className={`pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 transition-colors duration-500 md:p-8 ${
-              m === "leather"
+              darkSurface
                 ? "bg-gradient-to-t from-black/60 via-black/25 to-transparent text-cream"
                 : "text-ink"
             }`}
           >
             <div>
-              <p className={`label text-[10px] ${m === "leather" ? "text-cream/70" : "text-ink/60"}`}>Material sample</p>
+              <p className={`label text-[10px] ${darkSurface ? "text-cream/70" : "text-ink/60"}`}>Material sample</p>
               <p className="mt-1 text-[22px] font-bold uppercase tracking-[-0.02em] md:text-[32px]">{current.name}</p>
             </div>
-            <p className={`label hidden max-w-[240px] text-right md:block ${m === "leather" ? "text-cream/80" : "text-ink/70"}`}>{current.note}</p>
+            <p className={`label hidden max-w-[240px] text-right md:block ${darkSurface ? "text-cream/80" : "text-ink/70"}`}>{current.note}</p>
           </div>
         </div>
       </div>

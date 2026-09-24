@@ -23,9 +23,10 @@ export default function About() {
           {words.map(({ w, br }, k) => (
             <span key={k}>
               {br && <br />}
-              <Word p={scrollYProgress} range={[k / words.length * 0.6, (k + 1) / words.length * 0.6]} accent={w === "beautiful."}>
+              {/* the headline opens the About page, so it reads immediately; the paragraph below inks in with scroll */}
+              <span aria-hidden="true" className={w === "beautiful." ? "text-copper" : ""}>
                 {w}
-              </Word>{" "}
+              </span>{" "}
             </span>
           ))}
         </h2>

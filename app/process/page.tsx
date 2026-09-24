@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main id="main" className="pt-[14vh] md:pt-[16vh]">
+    <main id="main" className="pt-16">
       <Process />
       <PrintSpeaks />
     </main>

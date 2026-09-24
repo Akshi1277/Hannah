@@ -318,12 +318,12 @@ function SideBeat({
     >
       <div className={`relative max-w-[520px] ${right ? "md:text-right" : ""}`}>
         <TextGlow side={side} />
-        <p className={`hero-legible label relative mb-5 flex w-fit items-center gap-3 text-ink/90 font-medium ${right ? "md:ml-auto" : ""}`}>
+        <p className={`hero-legible hero-legible-strong label relative mb-5 flex w-fit items-center gap-3 text-ink/90 font-medium ${right ? "md:ml-auto" : ""}`}>
           <span className="h-px w-8 bg-copper" />
           {label}
         </p>
         <h2 className="display text-[clamp(40px,6.2vw,96px)] text-ink">{title}</h2>
-        <p className={`hero-legible relative mt-6 max-w-[380px] text-[15px] leading-relaxed text-ink/90 font-medium md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
+        <p className={`hero-legible hero-legible-strong relative mt-6 max-w-[380px] text-[15px] leading-relaxed text-ink/90 font-medium md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
           {body}
         </p>
       </div>
@@ -332,18 +332,30 @@ function SideBeat({
 }
 
 /**
-  * A feathered ambient wash behind the text block that softly diffuses without harsh edges or oval spots.
-  */
+ * Legibility glow behind a hero text block. No backdrop blur (a blur panel can't
+ * feather, so it always shows a hard edge). Every layer is an ellipse that reaches
+ * zero before the edge of this box, so no edge or card shape can ever appear:
+ *  - a wide, soft wash behind the whole block
+ *  - a lower, wider feather behind the paragraph (side beats)
+ *  - a small feather behind the label line (side beats)
+ */
 function TextGlow({ side }: { side?: "left" | "right" }) {
+  const c = (a: number) => `rgba(243,238,228,${a})`;
+  const x = side === "right" ? 62 : 38; // paragraph and label hug the text's alignment edge
+  const layers = [
+    `radial-gradient(50% 50% at 50% 50%, ${c(0.8)} 0%, ${c(0.64)} 45%, ${c(0.26)} 75%, ${c(0)} 100%)`,
+  ];
+  if (side) {
+    layers.unshift(
+      `radial-gradient(40% 27% at ${x}% 72%, ${c(0.84)} 0%, ${c(0.7)} 50%, ${c(0.28)} 80%, ${c(0)} 100%)`,
+      `radial-gradient(32% 12% at ${side === "right" ? 68 : 32}% 20%, ${c(0.72)} 0%, ${c(0.52)} 55%, ${c(0)} 100%)`,
+    );
+  }
   return (
     <span
       aria-hidden="true"
-      className="pointer-events-none absolute -inset-x-12 -inset-y-10 -z-10 block rounded-3xl opacity-80 backdrop-blur-[4px]"
-      style={{
-        background: side === "right"
-          ? "radial-gradient(ellipse at 75% 50%, rgba(243,238,228,0.82) 0%, rgba(243,238,228,0.48) 55%, transparent 85%)"
-          : "radial-gradient(ellipse at 25% 50%, rgba(243,238,228,0.82) 0%, rgba(243,238,228,0.48) 55%, transparent 85%)",
-      }}
+      className="pointer-events-none absolute -inset-x-[16%] -inset-y-[22%] -z-10 block"
+      style={{ background: layers.join(", ") }}
     />
   );
 }
@@ -419,7 +431,7 @@ function FinalBeat({ p }: { p: MotionValue<number> }) {
           </CtaButton>
           <a
             href={`mailto:${brand.email}`}
-            className="label inline-flex items-center rounded-full border border-cream/35 bg-cream/15 px-6 py-3.5 text-cream backdrop-blur-sm transition-all duration-300 hover:border-cream hover:bg-cream/25 hover:scale-105"
+            className="label inline-flex items-center rounded-full border border-cream/40 bg-charcoal/25 px-6 py-3.5 text-cream transition-all duration-300 hover:border-cream hover:bg-charcoal/40 hover:scale-105"
           >
             {brand.email}
           </a>
