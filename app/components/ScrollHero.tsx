@@ -320,7 +320,7 @@ function SideBeat({
     >
       <div className={`relative max-w-[520px] ${right ? "md:text-right" : ""}`}>
         <TextGlow />
-        <p className={`hero-legible label relative mb-5 flex items-center gap-3 text-[#8A5234] ${right ? "md:justify-end" : ""}`}>
+        <p className={`hero-legible label relative mb-5 flex w-fit items-center gap-3 text-[#8A5234] ${right ? "md:ml-auto" : ""}`}>
           <TextGlow tight />
           <span className="h-px w-8 bg-copper" />
           {label}
