@@ -254,10 +254,15 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
       {/* soft paper scrim keeps the charcoal type legible over the brightest frames */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 -z-10 md:hidden"
+        style={{ background: "linear-gradient(to top, rgba(243,238,228,0.9) 0%, rgba(243,238,228,0.7) 34%, rgba(243,238,228,0) 62%)" }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 hidden md:block"
         style={{
           background:
-            "radial-gradient(120% 90% at 0% 60%, rgba(243,238,228,0.92) 0%, rgba(243,238,228,0.55) 40%, rgba(243,238,228,0) 70%)",
+            "linear-gradient(to right, rgba(243,238,228,0.82) 0%, rgba(243,238,228,0.6) 26%, rgba(243,238,228,0) 50%)",
         }}
       />
       <div className="pointer-events-auto max-w-[1100px]">
@@ -327,13 +332,13 @@ function SideBeat({
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 md:hidden"
-        style={{ background: "linear-gradient(to top, rgba(243,238,228,0.96) 0%, rgba(243,238,228,0.85) 45%, rgba(243,238,228,0) 75%)" }}
+        style={{ background: "linear-gradient(to top, rgba(243,238,228,0.9) 0%, rgba(243,238,228,0.7) 30%, rgba(243,238,228,0) 55%)" }}
       />
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 hidden md:block"
         style={{
-          background: `radial-gradient(110% 100% at ${right ? "100%" : "0%"} 55%, rgba(243,238,228,0.97) 0%, rgba(243,238,228,0.88) 38%, rgba(243,238,228,0.5) 58%, rgba(243,238,228,0) 82%)`,
+          background: `linear-gradient(to ${right ? "left" : "right"}, rgba(243,238,228,0.86) 0%, rgba(243,238,228,0.66) 27%, rgba(243,238,228,0) 50%)`,
         }}
       />
       <div className={`max-w-[520px] ${right ? "md:text-right" : ""}`}>
@@ -394,10 +399,10 @@ function FinalBeat({ p }: { p: MotionValue<number> }) {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 60% at 50% 50%, rgba(42,38,34,0.72) 0%, rgba(42,38,34,0.45) 45%, rgba(42,38,34,0.12) 80%)",
+            "radial-gradient(44% 40% at 50% 50%, rgba(42,38,34,0.58) 0%, rgba(42,38,34,0.34) 55%, rgba(42,38,34,0) 100%)",
         }}
       />
-      <motion.div style={{ y }} className="pointer-events-auto relative">
+      <motion.div style={{ y }} className="pointer-events-auto relative [text-shadow:0_1px_18px_rgba(30,26,22,0.35)]">
         <img
           src={brand.logo.light}
           alt={hero.final.label}

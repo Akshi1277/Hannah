@@ -82,12 +82,10 @@ export default function Process() {
                     animate={{ scale: 1 }}
                     transition={{ duration: 1.8, ease: EASE }}
                   />
-                  {/* Discover and Develop keep their pencil annotations over the paper */}
-                  {i < 2 && (
-                    <div className="absolute inset-0 p-[7%] opacity-80 mix-blend-multiply">
-                      <StageVisual i={i} />
-                    </div>
-                  )}
+                  {/* each stage's own animation plays over its photograph */}
+                  <div className={STAGE_OVERLAY[i]}>
+                    <StageVisual i={i} />
+                  </div>
                   <figcaption className="label absolute bottom-3 left-4 text-[10px] text-cream/85 [text-shadow:0_1px_6px_rgba(0,0,0,0.35)]">
                     {process.stages[i].n} / {process.stages[i].title}
                   </figcaption>
@@ -114,6 +112,16 @@ const STAGE_PHOTOS = [
   { src: "/img/story/process-produce.jpg", alt: "A printed press sheet with registration marks, ink layers and a copper foil stripe" },
   { src: "/img/story/process-finish.jpg", alt: "Close-up of a copper foil line and blind-embossed mark on a soft-touch box" },
   { src: "/img/story/process-deliver.jpg", alt: "Finished packaging arranged as a still life by the studio window" },
+];
+
+// How each stage's animation sits over its photo.
+const STAGE_OVERLAY = [
+  "absolute inset-0 p-[7%] opacity-80 mix-blend-multiply", // Discover: pencil lines and brand fragments
+  "absolute inset-0 p-[7%] opacity-80 mix-blend-multiply", // Develop: dieline geometry
+  "absolute bottom-[6%] right-[5%] h-[58%] w-[58%]", // Refine: sample cards fan in
+  "absolute inset-0 p-[6%] opacity-75 mix-blend-multiply", // Produce: layers come into register
+  "absolute bottom-[6%] left-[5%] h-[46%] w-[46%]", // Finish: foil monogram plate
+  "absolute inset-0 p-[6%] opacity-85 mix-blend-multiply", // Deliver: route and travelling package
 ];
 
 const draw = (d = 0, dur = 1.4) => ({

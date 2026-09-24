@@ -147,28 +147,84 @@ function PhotoTile({
   );
 }
 
+/** Premium wrapping: a corner of wrapping paper folds over the board and closes as it scrolls into view. */
 function FoldCorner({ className }: { className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.6 });
+  const reduce = useReduce();
+  const closed = inView || reduce;
   return (
-    <PhotoTile
-      className={className}
-      src="/img/story/detail-wrap.jpg"
-      alt="Soft-touch paper being wrapped around a rigid box, corners folding into place"
-      title="Premium wrapping"
-      label="Wrapped board"
-    />
+    <Tile label="Wrapped board" title="Premium wrapping" className={className}>
+      <div ref={ref} className="absolute inset-0 flex items-center justify-center" style={{ perspective: 900 }}>
+        {/* shadow on the table */}
+        <div className="absolute h-8 w-56 translate-y-28 rounded-[50%] bg-charcoal/20 blur-md" />
+        {/* the wrapped board: stone-grey soft-touch paper with a copper foil line */}
+        <div
+          className="relative h-48 w-56 shadow-[0_28px_40px_-26px_rgba(42,38,34,0.7)]"
+          style={{ background: "linear-gradient(145deg, #C4B9A6 0%, #AFA391 60%, #A29684 100%)" }}
+        >
+          <div className="absolute inset-0 opacity-40 mix-blend-multiply [background-image:radial-gradient(rgba(60,50,40,0.25)_0.6px,transparent_0.7px)] [background-size:4px_4px]" />
+          <span className="absolute left-0 right-0 top-[38%] h-[3px]" style={{ background: "linear-gradient(90deg,#8A5234,#E0AD83,#A66A46)" }} />
+          <span className="absolute left-5 top-5 h-6 w-6 border border-[#9C907E] shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),inset_-1px_-1px_0_rgba(0,0,0,0.12)]" />
+          {/* the corner of wrapping paper, hinged on its diagonal, folding over the edge */}
+          <motion.div
+            className="absolute right-0 top-0 h-20 w-20"
+            style={{ transformOrigin: "0% 0%", clipPath: "polygon(0 0, 100% 0, 100% 100%)", background: "linear-gradient(225deg,#D2C8B6 0%,#B8AC99 70%)" }}
+            initial={false}
+            animate={{ rotateY: closed ? 0 : -165, rotateX: closed ? 0 : 18 }}
+            transition={{ duration: 1.5, ease: EASE, delay: closed ? 0.2 : 0 }}
+          />
+          {/* crease shadow appears once the fold is down */}
+          <motion.span
+            className="absolute right-0 top-0 h-20 w-20"
+            style={{ clipPath: "polygon(0 0, 100% 100%, 98% 100%, 0 2%)", background: "rgba(40,32,24,0.35)" }}
+            initial={false}
+            animate={{ opacity: closed ? 1 : 0 }}
+            transition={{ duration: 0.5, delay: closed ? 1.2 : 0 }}
+          />
+        </div>
+      </div>
+    </Tile>
   );
 }
 
+/** Magnetic closure: the lid lifts, then snaps shut onto the copper magnet when seen. */
 function MagneticBox({ className }: { className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.7 });
+  const reduce = useReduce();
+  const shut = inView || reduce;
   return (
-    <PhotoTile
-      className={className}
-      src="/img/story/detail-magnetic.jpg"
-      alt="Close-up of a copper magnetic closure and copper foil line on a stone-grey box"
-      title="Magnetic closure"
-      label="Bespoke construction"
-      snap
-    />
+    <Tile label="Bespoke construction" title="Magnetic closure" className={className}>
+      <div ref={ref} className="absolute inset-0 flex items-center justify-center">
+        <div className="relative h-36 w-60">
+          {/* table shadow tightens when the lid lands */}
+          <motion.div
+            className="absolute -bottom-4 left-1/2 h-6 w-56 -translate-x-1/2 rounded-[50%] bg-charcoal/25 blur-md"
+            initial={false}
+            animate={{ scaleX: shut ? 1 : 0.9, opacity: shut ? 1 : 0.6 }}
+            transition={{ duration: 0.4, delay: shut ? 0.35 : 0 }}
+          />
+          {/* base with the copper magnet at the front */}
+          <div className="absolute inset-x-0 bottom-0 h-24" style={{ background: "linear-gradient(180deg,#A99D8A,#978B78)" }} />
+          {/* lid: soft-touch wrap, copper foil line, blind emboss */}
+          <motion.div
+            className="absolute inset-x-0 bottom-[70px] h-16"
+            style={{ transformOrigin: "0% 100%", background: "linear-gradient(180deg,#CFC5B3,#BCB09D)" }}
+            initial={false}
+            animate={shut ? { y: 0, rotate: 0 } : { y: -54, rotate: -9 }}
+            transition={
+              reduce ? { duration: 0 } : shut ? { type: "spring", stiffness: 700, damping: 15, mass: 0.6, delay: 0.3 } : { duration: 0.6, ease: EASE }
+            }
+          >
+            <span className="absolute inset-x-0 top-5 h-[3px]" style={{ background: "linear-gradient(90deg,#8A5234,#E6B58C,#A66A46)" }} />
+            <span className="absolute left-1/2 top-9 h-4 w-8 -translate-x-1/2 border border-[#A89C89] shadow-[inset_1px_1px_0_rgba(255,255,255,0.4),inset_-1px_-1px_0_rgba(0,0,0,0.12)]" />
+            {/* copper magnet on the lid's front edge, landing on the base */}
+            <span className="absolute -bottom-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rounded-full shadow-[0_2px_4px_rgba(0,0,0,0.25),inset_0_-2px_3px_rgba(0,0,0,0.2)]" style={{ background: "radial-gradient(circle at 35% 30%,#F2C9A6,#B87550 70%)" }} />
+          </motion.div>
+        </div>
+      </div>
+    </Tile>
   );
 }
 
