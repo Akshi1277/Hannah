@@ -51,7 +51,7 @@ export default function Nav() {
           transition={{ duration: 0.7, ease: EASE }}
           className={`pointer-events-auto flex w-full items-center justify-between gap-6 md:grid md:grid-cols-[1fr_auto_1fr] transition-[background-color,border-color,box-shadow,border-radius] duration-700 ${
             compact
-              ? "mx-3 rounded-full border border-hair bg-cream/95 px-5 shadow-[0_10px_40px_-20px_rgba(42,38,34,0.45)] md:px-6"
+              ? "mx-3 rounded-full border border-hair/80 bg-cream/90 backdrop-blur-md px-5 shadow-[0_10px_40px_-20px_rgba(42,38,34,0.35)] md:px-6"
               : "gutter rounded-none border border-transparent bg-transparent"
           }`}
         >

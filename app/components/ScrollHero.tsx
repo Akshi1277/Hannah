@@ -253,8 +253,7 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
     >
       <div className="pointer-events-auto relative w-fit max-w-[1100px]">
         <TextGlow />
-        <motion.p {...mount(28, 1, 0.05)} className="hero-legible label relative mb-6 flex w-fit items-center gap-3 text-ink/80">
-          <TextGlow tight />
+        <motion.p {...mount(28, 1, 0.05)} className="hero-legible label relative mb-6 flex w-fit items-center gap-3 text-ink/90 font-medium">
           <RegMark className="h-3 w-3 text-copper" />
           {hero.label}
         </motion.p>
@@ -270,9 +269,8 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
         </motion.h1>
         <motion.p
           {...mount(36, 1.1, 0.4)}
-          className="hero-legible relative mt-6 max-w-[440px] text-[15px] leading-relaxed text-ink/85 md:text-[17px]"
+          className="hero-legible relative mt-6 max-w-[440px] text-[15px] leading-relaxed text-ink/90 md:text-[17px]"
         >
-          <TextGlow tight />
           {hero.body}
         </motion.p>
         <motion.div {...mount(28, 1, 0.55)} className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -319,15 +317,13 @@ function SideBeat({
       className={`gutter isolate absolute inset-0 flex items-end pb-24 md:items-center md:pb-0 ${right ? "md:justify-end" : "justify-start"}`}
     >
       <div className={`relative max-w-[520px] ${right ? "md:text-right" : ""}`}>
-        <TextGlow />
-        <p className={`hero-legible label relative mb-5 flex w-fit items-center gap-3 text-[#8A5234] ${right ? "md:ml-auto" : ""}`}>
-          <TextGlow tight />
+        <TextGlow side={side} />
+        <p className={`hero-legible label relative mb-5 flex w-fit items-center gap-3 text-ink/90 font-medium ${right ? "md:ml-auto" : ""}`}>
           <span className="h-px w-8 bg-copper" />
           {label}
         </p>
         <h2 className="display text-[clamp(40px,6.2vw,96px)] text-ink">{title}</h2>
-        <p className={`hero-legible relative mt-6 max-w-[380px] text-[15px] leading-relaxed text-ink/85 md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
-          <TextGlow tight />
+        <p className={`hero-legible relative mt-6 max-w-[380px] text-[15px] leading-relaxed text-ink/90 font-medium md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
           {body}
         </p>
       </div>
@@ -336,19 +332,17 @@ function SideBeat({
 }
 
 /**
- * A feathered paper glow that hugs the text block only. Dense directly behind the
- * words, gone a short distance beyond them, so the footage elsewhere stays clean.
- */
-function TextGlow({ tight = false }: { tight?: boolean }) {
-  // `tight` sits directly behind a paragraph of small text, where legibility matters most.
+  * A feathered ambient wash behind the text block that softly diffuses without harsh edges or oval spots.
+  */
+function TextGlow({ side }: { side?: "left" | "right" }) {
   return (
     <span
       aria-hidden="true"
-      className={`pointer-events-none absolute -z-10 block ${tight ? "-inset-x-[10%] -inset-y-[45%]" : "-inset-x-[14%] -inset-y-[20%]"}`}
+      className="pointer-events-none absolute -inset-x-12 -inset-y-10 -z-10 block rounded-3xl opacity-80 backdrop-blur-[4px]"
       style={{
-        background: tight
-          ? "radial-gradient(closest-side, rgba(243,238,228,0.9) 0%, rgba(243,238,228,0.82) 60%, rgba(243,238,228,0.4) 85%, rgba(243,238,228,0) 100%)"
-          : "radial-gradient(closest-side, rgba(243,238,228,0.8) 0%, rgba(243,238,228,0.66) 50%, rgba(243,238,228,0.3) 78%, rgba(243,238,228,0) 100%)",
+        background: side === "right"
+          ? "radial-gradient(ellipse at 75% 50%, rgba(243,238,228,0.82) 0%, rgba(243,238,228,0.48) 55%, transparent 85%)"
+          : "radial-gradient(ellipse at 25% 50%, rgba(243,238,228,0.82) 0%, rgba(243,238,228,0.48) 55%, transparent 85%)",
       }}
     />
   );
@@ -423,7 +417,10 @@ function FinalBeat({ p }: { p: MotionValue<number> }) {
           <CtaButton href={contactHref} tone="light">
             {cta.primary}
           </CtaButton>
-          <a href={`mailto:${brand.email}`} className="label text-cream underline decoration-cream/40 underline-offset-8 hover:decoration-cream">
+          <a
+            href={`mailto:${brand.email}`}
+            className="label inline-flex items-center rounded-full border border-cream/35 bg-cream/15 px-6 py-3.5 text-cream backdrop-blur-sm transition-all duration-300 hover:border-cream hover:bg-cream/25 hover:scale-105"
+          >
             {brand.email}
           </a>
         </div>

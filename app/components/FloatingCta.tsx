@@ -40,15 +40,17 @@ export default function FloatingCta() {
     const check = () => {
       const hero = document.getElementById("top");
       const contact = document.getElementById("contact");
+      const footer = document.querySelector("footer");
       const vh = window.innerHeight;
       const pastHero = hero ? hero.getBoundingClientRect().bottom < vh * 0.6 : true;
       const atContact = contact ? contact.getBoundingClientRect().top < vh * 0.8 : false;
+      const atFooter = footer ? footer.getBoundingClientRect().top < vh * 0.95 : false;
       let pinned = false;
       document.querySelectorAll("[data-pinned]").forEach((el) => {
         const r = el.getBoundingClientRect();
         if (r.top <= 4 && r.bottom >= vh - 4) pinned = true;
       });
-      const next = pastHero && !atContact && !pinned;
+      const next = pastHero && !atContact && !atFooter && !pinned;
       setShow(next);
       publish(next);
     };

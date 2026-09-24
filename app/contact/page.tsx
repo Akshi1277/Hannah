@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main id="main" className="pt-[6vh]">
+    <main id="main" className="pt-[14vh] md:pt-[16vh]">
       <Contact />
     </main>
   );

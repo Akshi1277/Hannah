@@ -72,7 +72,7 @@ export function ProcessPreview() {
                 <span className="label absolute left-3 top-3 text-[10px] text-cream [text-shadow:0_1px_6px_rgba(0,0,0,0.4)]">{s.n}</span>
               </div>
               <p className="mt-4 text-[20px] font-bold uppercase tracking-[-0.02em] text-ink">{s.title}</p>
-              <p className="mt-1 line-clamp-3 text-[14px] leading-snug text-ink-2">{s.body}</p>
+              <p className="mt-1 min-h-[64px] text-[13.5px] leading-snug text-ink-2">{s.body}</p>
             </Link>
           </motion.li>
         ))}
