@@ -253,7 +253,8 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
     >
       <div className="pointer-events-auto relative w-fit max-w-[1100px]">
         <TextGlow />
-        <motion.p {...mount(28, 1, 0.05)} className="hero-legible label mb-6 flex items-center gap-3 text-ink/80">
+        <motion.p {...mount(28, 1, 0.05)} className="hero-legible label relative mb-6 flex w-fit items-center gap-3 text-ink/80">
+          <TextGlow tight />
           <RegMark className="h-3 w-3 text-copper" />
           {hero.label}
         </motion.p>
@@ -319,7 +320,8 @@ function SideBeat({
     >
       <div className={`relative max-w-[520px] ${right ? "md:text-right" : ""}`}>
         <TextGlow />
-        <p className={`hero-legible label mb-5 flex items-center gap-3 text-[#8A5234] ${right ? "md:justify-end" : ""}`}>
+        <p className={`hero-legible label relative mb-5 flex items-center gap-3 text-[#8A5234] ${right ? "md:justify-end" : ""}`}>
+          <TextGlow tight />
           <span className="h-px w-8 bg-copper" />
           {label}
         </p>
