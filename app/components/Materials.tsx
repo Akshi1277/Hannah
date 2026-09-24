@@ -120,12 +120,12 @@ function MaterialField() {
                 aria-controls="material-field"
                 onClick={() => setM(x.id)}
                 onPointerMove={(e) => e.pointerType === "mouse" && (e.movementX !== 0 || e.movementY !== 0) && x.id !== m && setM(x.id)}
-                className={`group flex shrink-0 items-baseline gap-4 whitespace-nowrap rounded-full border px-4 py-2.5 text-left transition-colors lg:rounded-none lg:border-0 lg:border-b lg:px-0 lg:py-5 ${
+                className={`group flex shrink-0 items-baseline gap-4 whitespace-nowrap rounded-full border px-4 py-2.5 text-left transition-colors lg:w-full lg:whitespace-normal lg:rounded-none lg:border-0 lg:border-b lg:px-0 lg:py-5 ${
                   sel ? "border-ink bg-ink text-cream lg:bg-transparent lg:text-ink" : "border-hair text-ink-2 lg:border-hair"
                 }`}
               >
                 <span className="label text-[10px] opacity-60">0{i + 1}</span>
-                <span className="text-[15px] font-semibold uppercase tracking-[-0.01em] lg:text-[22px]">{x.name}</span>
+                <span className="text-[15px] font-semibold uppercase tracking-[-0.01em] lg:min-w-0 lg:text-[clamp(17px,1.45vw,22px)] lg:leading-tight">{x.name}</span>
                 <span className={`ml-auto hidden h-px bg-copper transition-all duration-700 lg:block ${sel ? "w-10" : "w-0"}`} />
               </button>
             );

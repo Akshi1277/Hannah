@@ -251,22 +251,9 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
       style={{ opacity, y, visibility }}
       className="gutter isolate absolute inset-x-0 bottom-0 top-0 flex flex-col justify-end pb-28 pt-20 md:justify-center md:pb-16 md:pt-24"
     >
-      {/* soft paper scrim keeps the charcoal type legible over the brightest frames */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 md:hidden"
-        style={{ background: "linear-gradient(to top, rgba(243,238,228,0.9) 0%, rgba(243,238,228,0.7) 34%, rgba(243,238,228,0) 62%)" }}
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 hidden md:block"
-        style={{
-          background:
-            "linear-gradient(to right, rgba(243,238,228,0.82) 0%, rgba(243,238,228,0.6) 26%, rgba(243,238,228,0) 50%)",
-        }}
-      />
-      <div className="pointer-events-auto max-w-[1100px]">
-        <motion.p {...mount(28, 1, 0.05)} className="label mb-6 flex items-center gap-3 text-ink-2">
+      <div className="pointer-events-auto relative w-fit max-w-[1100px]">
+        <TextGlow />
+        <motion.p {...mount(28, 1, 0.05)} className="hero-legible label mb-6 flex items-center gap-3 text-ink/80">
           <RegMark className="h-3 w-3 text-copper" />
           {hero.label}
         </motion.p>
@@ -282,8 +269,9 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
         </motion.h1>
         <motion.p
           {...mount(36, 1.1, 0.4)}
-          className="mt-6 max-w-[440px] text-[15px] leading-relaxed text-ink-2 md:text-[17px]"
+          className="hero-legible relative mt-6 max-w-[440px] text-[15px] leading-relaxed text-ink/85 md:text-[17px]"
         >
+          <TextGlow tight />
           {hero.body}
         </motion.p>
         <motion.div {...mount(28, 1, 0.55)} className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -329,29 +317,38 @@ function SideBeat({
       style={{ opacity, x, visibility }}
       className={`gutter isolate absolute inset-0 flex items-end pb-24 md:items-center md:pb-0 ${right ? "md:justify-end" : "justify-start"}`}
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 md:hidden"
-        style={{ background: "linear-gradient(to top, rgba(243,238,228,0.9) 0%, rgba(243,238,228,0.7) 30%, rgba(243,238,228,0) 55%)" }}
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 hidden md:block"
-        style={{
-          background: `linear-gradient(to ${right ? "left" : "right"}, rgba(243,238,228,0.86) 0%, rgba(243,238,228,0.66) 27%, rgba(243,238,228,0) 50%)`,
-        }}
-      />
-      <div className={`max-w-[520px] ${right ? "md:text-right" : ""}`}>
-        <p className={`label mb-5 flex items-center gap-3 text-copper ${right ? "md:justify-end" : ""}`}>
+      <div className={`relative max-w-[520px] ${right ? "md:text-right" : ""}`}>
+        <TextGlow />
+        <p className={`hero-legible label mb-5 flex items-center gap-3 text-[#8A5234] ${right ? "md:justify-end" : ""}`}>
           <span className="h-px w-8 bg-copper" />
           {label}
         </p>
         <h2 className="display text-[clamp(40px,6.2vw,96px)] text-ink">{title}</h2>
-        <p className={`mt-6 max-w-[380px] text-[15px] leading-relaxed text-ink-2 md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
+        <p className={`hero-legible relative mt-6 max-w-[380px] text-[15px] leading-relaxed text-ink/85 md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
+          <TextGlow tight />
           {body}
         </p>
       </div>
     </motion.div>
+  );
+}
+
+/**
+ * A feathered paper glow that hugs the text block only. Dense directly behind the
+ * words, gone a short distance beyond them, so the footage elsewhere stays clean.
+ */
+function TextGlow({ tight = false }: { tight?: boolean }) {
+  // `tight` sits directly behind a paragraph of small text, where legibility matters most.
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute -z-10 block ${tight ? "-inset-x-[10%] -inset-y-[45%]" : "-inset-x-[14%] -inset-y-[20%]"}`}
+      style={{
+        background: tight
+          ? "radial-gradient(closest-side, rgba(243,238,228,0.9) 0%, rgba(243,238,228,0.82) 60%, rgba(243,238,228,0.4) 85%, rgba(243,238,228,0) 100%)"
+          : "radial-gradient(closest-side, rgba(243,238,228,0.8) 0%, rgba(243,238,228,0.66) 50%, rgba(243,238,228,0.3) 78%, rgba(243,238,228,0) 100%)",
+      }}
+    />
   );
 }
 
