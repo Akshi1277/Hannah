@@ -8,6 +8,9 @@ import { CtaButton, EASE, RegMark } from "./primitives";
 /** Must equal the number of JPEGs in /public/frames (verified on disk after extraction). */
 export const FRAME_COUNT = 365;
 
+/** 0-based frames never shown: frame_0157 is a half-formed lid (a morph, not a motion). */
+const SKIP_FRAMES = new Set([156]);
+
 const frameSrc = (i: number, small: boolean) =>
   `/${small ? "frames-sm" : "frames"}/frame_${String(i + 1).padStart(4, "0")}.jpg`;
 
@@ -128,6 +131,7 @@ export default function ScrollHero() {
       }
       if (smooth !== scrollYProgress.get()) scrollYProgress.set(smooth);
       wantedIndex = Math.round(smooth * (FRAME_COUNT - 1));
+      if (SKIP_FRAMES.has(wantedIndex)) wantedIndex += 1;
       const onScreen = rect.bottom > 0 && rect.top < window.innerHeight;
 
       if (onScreen && wantedIndex !== currentIndex) {
@@ -186,16 +190,22 @@ export default function ScrollHero() {
     mq.addEventListener("change", on);
     return () => mq.removeEventListener("change", on);
   }, []);
+  // Framing keys: form beat (left text) over the fold, material beat (right text on desktop,
+  // bottom text on phones) over the finishing close-up, then back to full frame.
+  const FRAME_KEYS = [0, 0.13, 0.19, 0.3, 0.34, 0.39, 0.47, 0.53, 0.9, 1];
   const canvasScale = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.3, 0.44, 0.5, 0.9, 1],
-    wide ? [1, 1, 1.24, 1.24, 1, 1, 1.08] : [1, 1, 1, 1, 1, 1, 1.08],
+    FRAME_KEYS,
+    wide ? [1, 1, 1.24, 1.24, 1.24, 1.24, 1.24, 1, 1, 1.08] : [1, 1, 1, 1, 1, 1.2, 1.2, 1, 1, 1.08],
   );
   const canvasX = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.3, 0.44, 0.5, 1],
-    wide ? ["0%", "0%", "-10%", "-10%", "0%", "0%"] : ["0%", "0%", "0%", "0%", "0%", "0%"],
+    FRAME_KEYS,
+    wide
+      ? ["0%", "0%", "10%", "10%", "1%", "-10%", "-10%", "0%", "0%", "0%"]
+      : ["0%", "0%", "0%", "0%", "0%", "-9%", "-9%", "0%", "0%", "0%"],
   );
+
 
   return (
     <section
@@ -225,6 +235,7 @@ export default function ScrollHero() {
           <IdentityBeat p={scrollYProgress} />
           <MaterialBeat p={scrollYProgress} />
           <FormBeat p={scrollYProgress} />
+          <PageTurn p={scrollYProgress} />
           <FinalBeat p={scrollYProgress} />
           <HeroProgress p={scrollYProgress} />
         </div>
@@ -347,7 +358,7 @@ function TextGlow({ side }: { side?: "left" | "right" }) {
   ];
   if (side) {
     layers.unshift(
-      `radial-gradient(40% 27% at ${x}% 72%, ${c(0.84)} 0%, ${c(0.7)} 50%, ${c(0.28)} 80%, ${c(0)} 100%)`,
+      `radial-gradient(50% 31% at ${x}% 72%, ${c(0.78)} 0%, ${c(0.62)} 40%, ${c(0.3)} 72%, ${c(0.09)} 90%, ${c(0)} 100%)`,
       `radial-gradient(32% 12% at ${side === "right" ? 68 : 32}% 20%, ${c(0.72)} 0%, ${c(0.52)} 55%, ${c(0)} 100%)`,
     );
   }
@@ -360,11 +371,36 @@ function TextGlow({ side }: { side?: "left" | "right" }) {
   );
 }
 
+/**
+ * A sheet of paper turns across the screen, covering the one place where the footage
+ * jumps (studio → still life), so the change reads as a deliberate page turn.
+ * Fully covers the screen for p ≈ 0.829–0.842 (frames 303–307).
+ */
+function PageTurn({ p }: { p: MotionValue<number> }) {
+  const x = useTransform(p, [0.808, 0.863], ["100vw", "-160vw"]);
+  const visibility = useTransform(p, (v) => (v < 0.805 || v > 0.866 ? "hidden" : "visible"));
+  return (
+    <motion.div
+      aria-hidden="true"
+      style={{ x, visibility }}
+      className="pointer-events-none absolute inset-y-0 left-0 w-[160vw] bg-cream"
+    >
+      {/* soft shadow ahead of the sheet and a copper crease on its leading edge */}
+      <span className="absolute inset-y-0 left-0 block w-40 -translate-x-full bg-gradient-to-l from-charcoal/20 to-transparent" />
+      <span className="absolute inset-y-0 left-0 block w-px bg-copper/70" />
+      <span className="absolute left-[80vw] top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 text-ink-2">
+        <RegMark className="h-6 w-6 text-copper" />
+        <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em]">04 · The finished object</span>
+      </span>
+    </motion.div>
+  );
+}
+
 function MaterialBeat({ p }: { p: MotionValue<number> }) {
   return (
     <SideBeat
       p={p}
-      range={[0.24, 0.3, 0.44, 0.49]}
+      range={[0.34, 0.39, 0.47, 0.51]}
       from={40}
       side="right"
       label={hero.material.label}
@@ -378,7 +414,7 @@ function FormBeat({ p }: { p: MotionValue<number> }) {
   return (
     <SideBeat
       p={p}
-      range={[0.5, 0.56, 0.74, 0.8]}
+      range={[0.15, 0.2, 0.3, 0.34]}
       from={-40}
       side="left"
       label={hero.form.label}
@@ -441,7 +477,7 @@ function FinalBeat({ p }: { p: MotionValue<number> }) {
   );
 }
 
-const CHAPTERS = ["Idea", "Material", "Form", "Object"];
+const CHAPTERS = ["Idea", "Form", "Material", "Object"];
 
 function HeroProgress({ p }: { p: MotionValue<number> }) {
   const scaleX = useTransform(p, [0, 1], [0, 1]);
