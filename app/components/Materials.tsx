@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useTransform, type MotionValue } from "framer-motion";
 import { materials, materialsIntro, type MaterialKind } from "../content";
 import { EASE, FadeUp, MaskLines, RegMark, useReduce } from "./primitives";
 import { useProgress, PIN } from "./useProgress";
@@ -290,29 +290,52 @@ function MaterialToPackaging() {
   const reduce = useReduce();
   const p = useProgress(ref, PIN);
 
-  const stage = useTransform(p, [0, 0.18, 0.38, 0.58, 0.8, 1], [0, 1, 2, 3, 4, 4]);
+  // One object, start to finish: paper → sheet → dieline → folded tray → lidded,
+  // wrapped, foiled, embossed box → then the real photographed piece beside it.
+  const stage = useTransform(p, [0, 0.18, 0.34, 0.52, 0.66, 1], [0, 1, 2, 3, 4, 4]);
   const [idx, setIdx] = useState(0);
-  useEffect(() => stage.on("change", (v) => setIdx(Math.min(4, Math.round(v)))), [stage]);
+  useEffect(() => stage.on("change", (v) => setIdx(Math.min(4, Math.floor(v + 0.001)))), [stage]);
+  const [wide, setWide] = useState(true);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const on = () => setWide(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
 
   // 0 → 1: the paper from the opening shot fills the frame, then is cropped down to a sheet
   const paperClip = useTransform(p, [0.02, 0.17], ["inset(0% 0% 0% 0%)", "inset(30% 36% 30% 36%)"]);
   const paperOpacity = useTransform(p, [0.13, 0.2], [1, 0]);
   const paperScale = useTransform(p, [0, 0.17], reduce ? [1, 1] : [1.08, 1]);
-  const netOpacity = useTransform(p, [0.12, 0.19, 0.74, 0.82], [0, 1, 1, 0]);
-  // 1 → 2: dieline draws on the flat sheet
-  const dieline = useTransform(p, [0.2, 0.4], [0, 1]);
-  const dielineFade = useTransform(p, [0.42, 0.52], [1, 0]); // the flat outline leaves as walls rise
-  // 2 → 3: walls fold up
-  const fold = useTransform(p, [0.4, 0.62], [0, 90]);
+  const netOpacity = useTransform(p, [0.12, 0.19], [0, 1]);
+  // 1 → 2: dieline draws on the flat sheet, then leaves as the walls rise
+  const dieline = useTransform(p, [0.18, 0.34], [0, 1]);
+  const dielineFade = useTransform(p, [0.36, 0.44], [1, 0]);
+  // 2 → 3: walls fold up into a tray
+  const fold = useTransform(p, [0.34, 0.52], [0, 90]);
   const foldNeg = useTransform(fold, (v) => -v);
-  const tilt = useTransform(p, [0.3, 0.6], reduce ? [55, 55] : [0, 55]);
-  const spin = useTransform(p, [0.3, 0.75], reduce ? [-40, -40] : [0, -40]);
-  // 3 → 4: the finished box, the same object as the hero
-  const photo = useTransform(p, [0.74, 0.86], [0, 1]);
-  const photoScale = useTransform(p, [0.74, 1], [1.1, 1]);
+  const tilt = useTransform(p, [0.26, 0.5], reduce ? [55, 55] : [0, 55]);
+  const spin = useTransform(p, [0.26, 0.62], reduce ? [-40, -40] : [0, -40]);
+  // 3 → 4: lid drops on, board turns stone-grey, foil draws, emboss presses, magnet appears
+  const lidDrop = useTransform(p, [0.52, 0.62], [22, 0]); // vmin above the tray
+  const lidZ = useTransform(lidDrop, (v) => `${18.7 + v}vmin`); // walls are 55% of the 34vmin base
+  const lidOpacity = useTransform(p, [0.52, 0.56], [0, 1]);
+  const board = useTransform(p, [0.6, 0.7], ["#EFE6D4", "#B9AE9B"]);
+  const foil = useTransform(p, [0.66, 0.74], [0, 1]);
+  const emboss = useTransform(p, [0.72, 0.78], [0, 1]);
+  const embossScale = useTransform(p, [0.72, 0.78], [1.25, 1]);
+  const magnet = useTransform(p, [0.76, 0.8], [0, 1]);
+  // the finished drawing steps aside for the photographed piece
+  const boxX = useTransform(p, [0.82, 0.92], wide ? ["0vw", "-17vw"] : ["0vw", "0vw"]);
+  const boxY = useTransform(p, [0.82, 0.92], wide ? ["0vh", "0vh"] : ["0vh", "-14vh"]);
+  const boxScale = useTransform(p, [0.82, 0.92], [1, wide ? 0.92 : 0.78]);
+  const plate = useTransform(p, [0.84, 0.94], ["inset(0% 0% 100% 0%)", "inset(0% 0% 0% 0%)"]);
+  const plateOpacity = useTransform(p, [0.84, 0.88], [0, 1]);
+  const plateY = useTransform(p, [0.84, 0.96], reduce ? [0, 0] : [24, 0]);
 
   return (
-    <div ref={ref} className="relative" style={{ height: "300vh" }}>
+    <div ref={ref} className="relative" style={{ height: "340vh" }}>
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden bg-cream" data-pinned>
         <div className="gutter relative z-10 flex items-center justify-between pt-24 md:pt-28">
           <p className="label text-ink-2">Material → Packaging</p>
@@ -335,56 +358,101 @@ function MaterialToPackaging() {
         </motion.div>
 
         <div className="relative flex flex-1 items-center justify-center" style={{ perspective: "1400px" }}>
-          <motion.div
-            style={{ rotateX: tilt, rotateZ: spin, opacity: netOpacity, transformStyle: "preserve-3d" }}
-            className="relative h-[34vmin] w-[34vmin]"
-          >
-            <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
-              {/* base panel */}
-              <Panel />
-              {/* four walls hinged on the base edges */}
-              <motion.div className="absolute bottom-full left-0 h-[55%] w-full origin-bottom" style={{ rotateX: foldNeg, transformStyle: "preserve-3d" }}>
-                <Panel />
-              </motion.div>
-              <motion.div className="absolute left-0 top-full h-[55%] w-full origin-top" style={{ rotateX: fold, transformStyle: "preserve-3d" }}>
-                <Panel />
-              </motion.div>
-              <motion.div className="absolute right-full top-0 h-full w-[55%] origin-right" style={{ rotateY: fold, transformStyle: "preserve-3d" }}>
-                <Panel />
-              </motion.div>
-              <motion.div className="absolute left-full top-0 h-full w-[55%] origin-left" style={{ rotateY: foldNeg, transformStyle: "preserve-3d" }}>
-                <Panel />
-              </motion.div>
-              {/* dieline drawn over the flat net */}
-              <motion.svg
-                style={{ opacity: dielineFade }}
-                className="pointer-events-none absolute -inset-[55%] h-[210%] w-[210%] overflow-visible"
-                viewBox="0 0 210 210"
-                aria-hidden="true"
-              >
-                <motion.path
-                  d="M55 55 H155 V155 H55Z"
-                  fill="none" stroke="#A66A46" strokeWidth="0.6" strokeDasharray="3 2"
-                  style={{ pathLength: dieline }}
-                />
-                <motion.path
-                  d="M55 55 V0 H155 V55 H210 V155 H155 V210 H55 V155 H0 V55Z"
-                  fill="none" stroke="#171717" strokeWidth="0.6"
-                  style={{ pathLength: dieline }}
-                />
-              </motion.svg>
-            </div>
+          <motion.div style={{ x: boxX, y: boxY, scale: boxScale, transformStyle: "preserve-3d" }} className="relative">
+            <motion.div
+              role="img"
+              aria-label="A flat board folds into a tray, a lid drops on, and it becomes a stone-grey rigid box with a copper foil line, an embossed mark and a copper magnetic closure."
+              style={{ rotateX: tilt, rotateZ: spin, opacity: netOpacity, transformStyle: "preserve-3d" }}
+              className="relative h-[34vmin] w-[34vmin]"
+            >
+              <div className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
+                {/* base and four walls hinged on its edges */}
+                <Panel color={board} shade={0.06} />
+                <motion.div className="absolute bottom-full left-0 h-[55%] w-full origin-bottom" style={{ rotateX: foldNeg, transformStyle: "preserve-3d" }}>
+                  <Panel color={board} shade={0.02} />
+                </motion.div>
+                <motion.div className="absolute left-0 top-full h-[55%] w-full origin-top" style={{ rotateX: fold, transformStyle: "preserve-3d" }}>
+                  <Panel color={board} shade={0.16} />
+                </motion.div>
+                <motion.div className="absolute right-full top-0 h-full w-[55%] origin-right" style={{ rotateY: fold, transformStyle: "preserve-3d" }}>
+                  <Panel color={board} shade={0.22} />
+                </motion.div>
+                <motion.div className="absolute left-full top-0 h-full w-[55%] origin-left" style={{ rotateY: foldNeg, transformStyle: "preserve-3d" }}>
+                  <Panel color={board} shade={0.1} />
+                </motion.div>
+
+                {/* dieline drawn over the flat net */}
+                <motion.svg
+                  style={{ opacity: dielineFade }}
+                  className="pointer-events-none absolute -inset-[55%] h-[210%] w-[210%] overflow-visible"
+                  viewBox="0 0 210 210"
+                  aria-hidden="true"
+                >
+                  <motion.path d="M55 55 H155 V155 H55Z" fill="none" stroke="#A66A46" strokeWidth="0.6" strokeDasharray="3 2" style={{ pathLength: dieline }} />
+                  <motion.path
+                    d="M55 55 V0 H155 V55 H210 V155 H155 V210 H55 V155 H0 V55Z"
+                    fill="none"
+                    stroke="#171717"
+                    strokeWidth="0.6"
+                    style={{ pathLength: dieline }}
+                  />
+                </motion.svg>
+
+                {/* lid: a slightly larger top with skirts hanging over the walls */}
+                <motion.div className="absolute -inset-[3%]" style={{ z: lidZ, opacity: lidOpacity, transformStyle: "preserve-3d" }}>
+                  <Panel color={board} shade={0} lid />
+                  {/* copper foil line and blind emboss on the lid */}
+                  <motion.span
+                    className="absolute left-0 right-0 top-[64%] block h-[2.2%] origin-left"
+                    style={{ scaleX: foil, background: "linear-gradient(90deg,#8A5234,#E6B58C 45%,#A66A46 60%,#7A4428)" }}
+                  />
+                  <motion.span
+                    className="absolute left-[38%] top-[26%] block h-[20%] w-[24%] border border-[#8F8472]"
+                    style={{
+                      opacity: emboss,
+                      scale: embossScale,
+                      boxShadow: "inset 1.5px 1.5px 0 rgba(255,255,255,0.35), inset -1.5px -1.5px 0 rgba(0,0,0,0.18), 1px 1px 0 rgba(255,255,255,0.25)",
+                    }}
+                  />
+                  {/* skirts */}
+                  <motion.div className="absolute bottom-full left-0 h-[20%] w-full origin-bottom" style={{ rotateX: 90 }}>
+                    <Panel color={board} shade={0.04} />
+                  </motion.div>
+                  <motion.div className="absolute left-0 top-full h-[20%] w-full origin-top" style={{ rotateX: -90, transformStyle: "preserve-3d" }}>
+                    <Panel color={board} shade={0.14} />
+                    {/* copper magnetic closure on the front skirt */}
+                    <motion.span
+                      className="absolute left-1/2 top-1/2 block aspect-square h-[46%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                      style={{ opacity: magnet, scale: magnet, background: "radial-gradient(circle at 35% 30%,#F2C9A6,#B87550 70%)", boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+                    />
+                  </motion.div>
+                  <motion.div className="absolute right-full top-0 h-full w-[20%] origin-right" style={{ rotateY: -90 }}>
+                    <Panel color={board} shade={0.2} />
+                  </motion.div>
+                  <motion.div className="absolute left-full top-0 h-full w-[20%] origin-left" style={{ rotateY: 90 }}>
+                    <Panel color={board} shade={0.1} />
+                  </motion.div>
+                </motion.div>
+              </div>
+            </motion.div>
           </motion.div>
 
-          <motion.div style={{ opacity: photo }} className="pointer-events-none absolute inset-0">
-            <motion.img
+          {/* the real piece: the same box, photographed, laid beside the drawing as a plate */}
+          <motion.figure
+            style={{ clipPath: plate, opacity: plateOpacity, y: plateY }}
+            className="crop absolute bottom-[3vh] left-[9vw] w-[82vw] md:bottom-auto md:left-auto md:right-[7vw] md:top-[18%] md:w-[36vw]"
+          >
+            <img
               src="/img/story/packaging-finished.jpg"
               alt="The finished rigid box: stone-grey soft-touch wrap, a copper foil line, a blind-embossed mark and a copper magnetic closure"
               loading="lazy"
-              style={{ scale: photoScale }}
-              className="h-full w-full object-cover"
+              className="aspect-[4/3] w-full object-cover shadow-[0_30px_60px_-30px_rgba(42,38,34,0.55)]"
             />
-          </motion.div>
+            <figcaption className="label mt-3 flex justify-between text-[10px] text-ink-2">
+              <span>05 · Finished piece</span>
+              <span className="text-muted">Photographed</span>
+            </figcaption>
+          </motion.figure>
         </div>
 
         <ol className="gutter relative z-10 grid grid-cols-5 gap-2 pb-10 md:gap-6 md:pb-14">
@@ -398,7 +466,7 @@ function MaterialToPackaging() {
                   transition={{ duration: 0.6, ease: EASE }}
                 />
               </span>
-              <span className={`label mt-3 block text-[9px] transition-colors md:text-[11px] ${i === idx ? (idx === 4 ? "text-cream" : "text-ink") : idx === 4 ? "text-cream/60" : "text-muted"}`}>
+              <span className={`label mt-3 block text-[9px] transition-colors md:text-[11px] ${i === idx ? "text-ink" : "text-muted"}`}>
                 <span className="hidden md:inline">0{i + 1} </span>
                 {j}
               </span>
@@ -410,12 +478,14 @@ function MaterialToPackaging() {
   );
 }
 
-function Panel() {
-  // Flat folding-board colour; the site-wide paper grain supplies the texture.
+function Panel({ color, shade = 0, lid = false }: { color: MotionValue<string>; shade?: number; lid?: boolean }) {
+  // Board colour animates cream → stone-grey; a fixed shade per face keeps the 3D form readable.
   return (
-    <div
-      className="absolute inset-0 shadow-[inset_0_0_0_0.5px_rgba(23,23,23,0.3)]"
-      style={{ background: "linear-gradient(135deg, #EFE6D4 0%, #E6DCC8 100%)", backfaceVisibility: "visible" }}
-    />
+    <motion.div
+      className={`absolute inset-0 ${lid ? "shadow-[inset_0_0_0_0.5px_rgba(23,23,23,0.35)]" : "shadow-[inset_0_0_0_0.5px_rgba(23,23,23,0.3)]"}`}
+      style={{ backgroundColor: color, backfaceVisibility: "visible" }}
+    >
+      <span className="absolute inset-0 block" style={{ background: `linear-gradient(135deg, rgba(255,255,255,0.12), rgba(0,0,0,${shade}))` }} />
+    </motion.div>
   );
 }
