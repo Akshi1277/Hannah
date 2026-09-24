@@ -1,1 +1,4 @@
 02.mp4 is used up to frame 167 (6.96s); later frames ghost into the end image.
+Replacement clips for the hero (see chat for prompts)
+fold: 01.mp4 frame 30 -> 01 last frame (fold_start.png -> fold_end.png)
+lid:  02.mp4 frame 114 -> 02 frame 167 (lid_start.png -> lid_end.png)

@@ -8,9 +8,6 @@ import { CtaButton, EASE, RegMark } from "./primitives";
 /** Must equal the number of JPEGs in /public/frames (verified on disk after extraction). */
 export const FRAME_COUNT = 365;
 
-/** 0-based frames never shown: frame_0157 is a half-formed lid (a morph, not a motion). */
-const SKIP_FRAMES = new Set([156]);
-
 const frameSrc = (i: number, small: boolean) =>
   `/${small ? "frames-sm" : "frames"}/frame_${String(i + 1).padStart(4, "0")}.jpg`;
 
@@ -131,7 +128,6 @@ export default function ScrollHero() {
       }
       if (smooth !== scrollYProgress.get()) scrollYProgress.set(smooth);
       wantedIndex = Math.round(smooth * (FRAME_COUNT - 1));
-      if (SKIP_FRAMES.has(wantedIndex)) wantedIndex += 1;
       const onScreen = rect.bottom > 0 && rect.top < window.innerHeight;
 
       if (onScreen && wantedIndex !== currentIndex) {
@@ -190,21 +186,17 @@ export default function ScrollHero() {
     mq.addEventListener("change", on);
     return () => mq.removeEventListener("change", on);
   }, []);
-  // Framing keys: form beat (left text) over the fold, material beat (right text on desktop,
-  // bottom text on phones) over the finishing close-up, then back to full frame.
-  const FRAME_KEYS = [0, 0.13, 0.19, 0.3, 0.34, 0.39, 0.47, 0.53, 0.9, 1];
   const canvasScale = useTransform(
     scrollYProgress,
-    FRAME_KEYS,
-    wide ? [1, 1, 1.24, 1.24, 1.24, 1.24, 1.24, 1, 1, 1.08] : [1, 1, 1, 1, 1, 1.2, 1.2, 1, 1, 1.08],
+    [0, 0.22, 0.3, 0.44, 0.5, 0.9, 1],
+    wide ? [1, 1, 1.24, 1.24, 1, 1, 1.08] : [1, 1, 1, 1, 1, 1, 1.08],
   );
   const canvasX = useTransform(
     scrollYProgress,
-    FRAME_KEYS,
-    wide
-      ? ["0%", "0%", "-8%", "-8%", "-9%", "-10%", "-10%", "0%", "0%", "0%"]
-      : ["0%", "0%", "0%", "0%", "0%", "-9%", "-9%", "0%", "0%", "0%"],
+    [0, 0.22, 0.3, 0.44, 0.5, 1],
+    wide ? ["0%", "0%", "-10%", "-10%", "0%", "0%"] : ["0%", "0%", "0%", "0%", "0%", "0%"],
   );
+
 
 
   return (
@@ -235,7 +227,6 @@ export default function ScrollHero() {
           <IdentityBeat p={scrollYProgress} />
           <MaterialBeat p={scrollYProgress} />
           <FormBeat p={scrollYProgress} />
-          <PageTurn p={scrollYProgress} />
           <FinalBeat p={scrollYProgress} />
           <HeroProgress p={scrollYProgress} />
         </div>
@@ -263,8 +254,7 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
       className="gutter isolate absolute inset-x-0 bottom-0 top-0 flex flex-col justify-end pb-28 pt-20 md:justify-center md:pb-16 md:pt-24"
     >
       <div className="pointer-events-auto relative w-fit max-w-[1100px]">
-        <TextGlow />
-        <motion.p {...mount(28, 1, 0.05)} className="hero-legible label relative mb-6 flex w-fit items-center gap-3 text-ink/90 font-medium">
+        <motion.p {...mount(28, 1, 0.05)} className="label relative mb-6 flex w-fit items-center gap-3 font-medium text-ink">
           <RegMark className="h-3 w-3 text-copper" />
           {hero.label}
         </motion.p>
@@ -280,7 +270,7 @@ function IdentityBeat({ p }: { p: MotionValue<number> }) {
         </motion.h1>
         <motion.p
           {...mount(36, 1.1, 0.4)}
-          className="hero-legible relative mt-6 max-w-[440px] text-[15px] leading-relaxed text-ink/90 md:text-[17px]"
+          className="relative mt-6 max-w-[440px] text-[15px] font-medium leading-relaxed text-ink md:text-[17px]"
         >
           {hero.body}
         </motion.p>
@@ -328,69 +318,15 @@ function SideBeat({
       className={`gutter isolate absolute inset-0 flex items-end pb-24 md:items-center md:pb-0 ${right ? "md:justify-end" : "justify-start"}`}
     >
       <div className={`relative max-w-[520px] ${right ? "md:text-right" : ""}`}>
-        <TextGlow side={side} />
-        <p className={`hero-legible hero-legible-strong label relative mb-5 flex w-fit items-center gap-3 text-ink/90 font-medium ${right ? "md:ml-auto" : ""}`}>
+        <p className={`label relative mb-5 flex w-fit items-center gap-3 font-medium text-ink ${right ? "md:ml-auto" : ""}`}>
           <span className="h-px w-8 bg-copper" />
           {label}
         </p>
         <h2 className="display text-[clamp(40px,6.2vw,96px)] text-ink">{title}</h2>
-        <p className={`hero-legible hero-legible-strong relative mt-6 max-w-[380px] text-[15px] leading-relaxed text-ink/90 font-medium md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
+        <p className={`relative mt-6 max-w-[380px] text-[15px] font-medium leading-relaxed text-ink md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
           {body}
         </p>
       </div>
-    </motion.div>
-  );
-}
-
-/**
- * Legibility glow behind a hero text block. No backdrop blur (a blur panel can't
- * feather, so it always shows a hard edge). Every layer is an ellipse that reaches
- * zero before the edge of this box, so no edge or card shape can ever appear:
- *  - a wide, soft wash behind the whole block
- *  - a lower, wider feather behind the paragraph (side beats)
- *  - a small feather behind the label line (side beats)
- */
-function TextGlow({ side }: { side?: "left" | "right" }) {
-  const c = (a: number) => `rgba(243,238,228,${a})`;
-  const x = side === "right" ? 62 : 38; // paragraph and label hug the text's alignment edge
-  const layers = [
-    `radial-gradient(50% 50% at 50% 50%, ${c(0.8)} 0%, ${c(0.64)} 45%, ${c(0.26)} 75%, ${c(0)} 100%)`,
-  ];
-  if (side) {
-    layers.unshift(
-      `radial-gradient(32% 12% at ${side === "right" ? 68 : 32}% 20%, ${c(0.72)} 0%, ${c(0.52)} 55%, ${c(0)} 100%)`,
-    );
-  }
-  return (
-    <span
-      aria-hidden="true"
-      className="pointer-events-none absolute -inset-x-[16%] -inset-y-[22%] -z-10 block"
-      style={{ background: layers.join(", ") }}
-    />
-  );
-}
-
-/**
- * A sheet of paper turns across the screen, covering the one place where the footage
- * jumps (studio → still life), so the change reads as a deliberate page turn.
- * Fully covers the screen for p ≈ 0.829–0.842 (frames 303–307).
- */
-function PageTurn({ p }: { p: MotionValue<number> }) {
-  const x = useTransform(p, [0.808, 0.863], ["100vw", "-160vw"]);
-  const visibility = useTransform(p, (v) => (v < 0.805 || v > 0.866 ? "hidden" : "visible"));
-  return (
-    <motion.div
-      aria-hidden="true"
-      style={{ x, visibility }}
-      className="pointer-events-none absolute inset-y-0 left-0 w-[160vw] bg-cream"
-    >
-      {/* soft shadow ahead of the sheet and a copper crease on its leading edge */}
-      <span className="absolute inset-y-0 left-0 block w-40 -translate-x-full bg-gradient-to-l from-charcoal/20 to-transparent" />
-      <span className="absolute inset-y-0 left-0 block w-px bg-copper/70" />
-      <span className="absolute left-[80vw] top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 text-ink-2">
-        <RegMark className="h-6 w-6 text-copper" />
-        <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em]">04 · The finished object</span>
-      </span>
     </motion.div>
   );
 }
@@ -399,7 +335,7 @@ function MaterialBeat({ p }: { p: MotionValue<number> }) {
   return (
     <SideBeat
       p={p}
-      range={[0.34, 0.39, 0.47, 0.51]}
+      range={[0.24, 0.3, 0.44, 0.49]}
       from={40}
       side="right"
       label={hero.material.label}
@@ -413,7 +349,7 @@ function FormBeat({ p }: { p: MotionValue<number> }) {
   return (
     <SideBeat
       p={p}
-      range={[0.15, 0.2, 0.3, 0.34]}
+      range={[0.5, 0.56, 0.74, 0.8]}
       from={-40}
       side="left"
       label={hero.form.label}
@@ -476,7 +412,7 @@ function FinalBeat({ p }: { p: MotionValue<number> }) {
   );
 }
 
-const CHAPTERS = ["Idea", "Form", "Material", "Object"];
+const CHAPTERS = ["Idea", "Material", "Form", "Object"];
 
 function HeroProgress({ p }: { p: MotionValue<number> }) {
   const scaleX = useTransform(p, [0, 1], [0, 1]);
