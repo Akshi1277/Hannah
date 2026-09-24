@@ -67,6 +67,20 @@ body::after {
 }
 
 @layer components {
+  /* Crop marks — small printer's corners used as framing across the site. */
+  .crop {
+    position: relative;
+  }
+  .crop::before,
+  .crop::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: rgba(23, 23, 23, 0.45);
+    pointer-events: none;
+  }
+
   .label {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -89,19 +103,7 @@ body::after {
   }
 }
 
-/* Crop marks — small printer's corners used as framing across the site. */
-.crop {
-  position: relative;
-}
-.crop::before,
-.crop::after {
-  content: "";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: rgba(23, 23, 23, 0.45);
-  pointer-events: none;
-}
+
 .crop::before {
   top: -8px;
   left: -8px;
