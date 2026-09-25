@@ -67,12 +67,10 @@ export const hero = {
   material: {
     label: "Materials that matter",
     title: "The right material changes everything.",
-    body: "The right material can transform how a product is seen, held and remembered.",
   },
   form: {
     label: "From idea to finished piece",
     title: "Flat becomes form.",
-    body: "Every project follows a considered sequence, from first conversation to finished delivery. Each stage is an opportunity to refine the detail.",
   },
   final: {
     label: "Hannah Pixels",

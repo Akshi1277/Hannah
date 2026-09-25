@@ -6,7 +6,7 @@ import { brand, contactHref, cta, hero } from "../content";
 import { CtaButton, EASE, RegMark } from "./primitives";
 
 /** Must equal the number of JPEGs in /public/frames (verified on disk after extraction). */
-export const FRAME_COUNT = 365;
+export const FRAME_COUNT = 437;
 
 const frameSrc = (i: number, small: boolean) =>
   `/${small ? "frames-sm" : "frames"}/frame_${String(i + 1).padStart(4, "0")}.jpg`;
@@ -188,13 +188,13 @@ export default function ScrollHero() {
   }, []);
   const canvasScale = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.3, 0.44, 0.5, 0.9, 1],
-    wide ? [1, 1, 1.24, 1.24, 1, 1, 1.08] : [1, 1, 1, 1, 1, 1, 1.08],
+    [0, 0.23, 0.31, 0.49, 0.55, 0.9, 1],
+    [1, 1, 1, 1, 1, 1, 1.08], // no push-in: the new close-ups already fill the frame
   );
   const canvasX = useTransform(
     scrollYProgress,
-    [0, 0.22, 0.3, 0.44, 0.5, 1],
-    wide ? ["0%", "0%", "-10%", "-10%", "0%", "0%"] : ["0%", "0%", "0%", "0%", "0%", "0%"],
+    [0, 0.23, 0.31, 0.49, 0.55, 1],
+    ["0%", "0%", "0%", "0%", "0%", "0%"],
   );
 
 
@@ -204,7 +204,7 @@ export default function ScrollHero() {
       id="top"
       ref={containerRef}
       aria-label="Where ideas take form"
-      style={{ height: "380vh", position: "relative" }}
+      style={{ height: "560vh", position: "relative" }}
     >
       <div
         style={{
@@ -221,7 +221,7 @@ export default function ScrollHero() {
           style={{ scale: canvasScale, x: canvasX }}
           className="absolute inset-0 block"
           role="img"
-          aria-label="One continuous camera move: a dieline on cream specialty paper folds into a box, the box is wrapped in stone-grey paper with a copper foil line and magnetic closure, the camera pulls back through the design studio and settles on a still life of finished packaging by the window."
+          aria-label="One continuous camera move: a dieline sheet folds into a tray, stone-grey paper with a copper stripe wraps it, the lid closes onto a copper magnetic disc, the camera pulls back through the design studio and glides to a still life of finished packaging by the window."
         />
         <div style={{ position: "absolute", inset: 0 }} className="pointer-events-none">
           <IdentityBeat p={scrollYProgress} />
@@ -296,15 +296,15 @@ function SideBeat({
   side,
   label,
   title,
-  body,
+  high = false,
 }: {
+  high?: boolean; // sit in the upper part of the frame, where the footage is calm
   p: MotionValue<number>;
   range: [number, number, number, number];
   from: number;
   side: "left" | "right";
   label: string;
   title: string;
-  body: string;
 }) {
   const [a, b, c, d] = range;
   const opacity = useTransform(p, [a, b, c, d], [0, 1, 1, 0]);
@@ -315,17 +315,16 @@ function SideBeat({
   return (
     <motion.div
       style={{ opacity, x, visibility }}
-      className={`gutter isolate absolute inset-0 flex items-end pb-24 md:items-center md:pb-0 ${right ? "md:justify-end" : "justify-start"}`}
+      className={`gutter isolate absolute inset-0 flex ${high ? "items-start pt-[16vh] md:pt-[17vh]" : "items-end pb-24 md:items-center md:pb-0"} ${right ? "md:justify-end" : "justify-start"}`}
     >
       <div className={`relative max-w-[520px] ${right ? "md:text-right" : ""}`}>
         <p className={`label relative mb-5 flex w-fit items-center gap-3 font-medium text-ink ${right ? "md:ml-auto" : ""}`}>
           <span className="h-px w-8 bg-copper" />
           {label}
         </p>
+        {/* Middle beats are label + headline only: one bold line over clean footage.
+            Their supporting copy lives on the Materials and Process pages. */}
         <h2 className="display text-[clamp(40px,6.2vw,96px)] text-ink">{title}</h2>
-        <p className={`relative mt-6 max-w-[380px] text-[15px] font-medium leading-relaxed text-ink md:text-[17px] ${right ? "md:ml-auto" : ""}`}>
-          {body}
-        </p>
       </div>
     </motion.div>
   );
@@ -335,12 +334,12 @@ function MaterialBeat({ p }: { p: MotionValue<number> }) {
   return (
     <SideBeat
       p={p}
-      range={[0.24, 0.3, 0.44, 0.49]}
+      range={[0.25, 0.31, 0.49, 0.54]}
+      high
       from={40}
       side="right"
       label={hero.material.label}
       title={hero.material.title}
-      body={hero.material.body}
     />
   );
 }
@@ -349,12 +348,12 @@ function FormBeat({ p }: { p: MotionValue<number> }) {
   return (
     <SideBeat
       p={p}
-      range={[0.5, 0.56, 0.74, 0.8]}
+      range={[0.68, 0.72, 0.8, 0.83]}
+      high
       from={-40}
       side="left"
       label={hero.form.label}
       title={hero.form.title}
-      body={hero.form.body}
     />
   );
 }

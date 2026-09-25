@@ -2,3 +2,9 @@
 Replacement clips for the hero (see chat for prompts)
 fold: 01.mp4 frame 30 -> 01 last frame (fold_start.png -> fold_end.png)
 lid:  02.mp4 frame 114 -> 02 frame 167 (lid_start.png -> lid_end.png)
+1_fold.mp4 (take A) is used up to frame 127 (fully formed box); later frames un-fold toward the old end image.
+Clip 2 (wrap) must start from wrap_start.png (= 1_fold frame 127) and end on lid_start.png.
+2_wrap.mp4 = Wrapping_paper_covers_tray_...223201 (full clip). lid_start_v2.png = its last frame -> start of clip 3 (lid), no end frame.
+3_lid.mp4 = Box_lid_closes_on_table_...125703 (full clip). studio_start.png = its last frame -> start of clip 4 (studio pull-back), no end frame.
+4_studio.mp4 = Camera_moves_away_from_box_...130845 (full clip). still_start.png = its last frame -> start of clip 5 (still life), no end frame.
+5_still.mp4 = Camera_moving_through_design_ate..._132941 (full clip).
