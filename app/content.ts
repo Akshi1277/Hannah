@@ -6,9 +6,9 @@ export const brand = {
   tagline: "Where ideas take form.",
   description:
     "Hannah Pixels is a print and packaging house creating considered physical experiences for brands across the world.",
-  seoTitle: "Hannah Pixels | Print & Packaging Worldwide",
+  seoTitle: "Hannah Pixels | Luxury Print & Packaging House Worldwide",
   seoDescription:
-    "Hannah Pixels creates considered print and packaging for brands worldwide, from luxury rigid boxes and fragrance packaging to bespoke paper bags, publishing and bespoke packaging.",
+    "Hannah Pixels creates considered print and packaging for brands worldwide — from bespoke luxury rigid boxes and fragrance packaging to custom bags and publishing.",
   url: "https://hannahpixels.com",
   email: "info@hannahpixels.com",
   phone: "+91 70390 38842",

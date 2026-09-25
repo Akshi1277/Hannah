@@ -1,0 +1,5 @@
+User-agent: *
+allow: /
+
+Sitemap: https://hannahpixels.com/sitemap.xml
+Host: https://hannahpixels.com
