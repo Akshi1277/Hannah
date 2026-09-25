@@ -68,6 +68,16 @@ export default function Footer() {
             </a>
             <a href={brand.phoneHref} className={`${link} mt-2 block`}>{brand.phone}</a>
             <p className="mt-3 text-[15px] leading-snug text-cream/50">{footer.enquiriesNote}</p>
+            <a
+              href="https://www.instagram.com/hannahpixels.ig"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${link} mt-4 inline-flex items-center gap-1.5 text-[15px]`}
+              title="Hannah Pixels on Instagram"
+            >
+              <span>Instagram</span>
+              <span className="text-copper font-mono text-xs">↗</span>
+            </a>
           </div>
         </div>
 

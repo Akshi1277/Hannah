@@ -30,8 +30,12 @@ export const metadata: Metadata = {
   description: brand.seoDescription,
   keywords: [
     "Hannah Pixels",
+    "Hannah Pixel",
+    "Hannah",
     "HannahPixels",
     "hannahpixels.com",
+    "Hannah Packaging",
+    "Hannah Print",
     "Luxury Packaging",
     "Custom Packaging Manufacturer",
     "Rigid Box Manufacturer",
@@ -108,7 +112,7 @@ const jsonLd = {
       "@id": `${brand.url}/#website`,
       "url": brand.url,
       "name": "Hannah Pixels",
-      "alternateName": ["HannahPixels", "Hannah Pixels Print & Packaging", "hannahpixels.com"],
+      "alternateName": ["Hannah Pixel", "Hannah", "HannahPixels", "Hannah Pixels Print & Packaging", "hannahpixels.com"],
       "description": "Where ideas take form. Luxury print and packaging house creating considered physical experiences for brands worldwide.",
       "publisher": {
         "@id": `${brand.url}/#organization`,
@@ -120,7 +124,7 @@ const jsonLd = {
       "@id": `${brand.url}/#organization`,
       "name": brand.name,
       "legalName": "Hannah Pixels",
-      "alternateName": ["HannahPixels", "Hannah Pixels Packaging", "Hannah Pixels Print & Packaging House"],
+      "alternateName": ["Hannah Pixel", "Hannah", "HannahPixels", "Hannah Pixels Packaging", "Hannah Pixels Print & Packaging House"],
       "url": brand.url,
       "logo": {
         "@type": "ImageObject",
@@ -145,6 +149,9 @@ const jsonLd = {
         "name": "BRAHM Global Holdings",
         "url": "https://brahmglobalholdings.com",
       },
+      "sameAs": [
+        "https://www.instagram.com/hannahpixels.ig"
+      ],
       "contactPoint": [
         {
           "@type": "ContactPoint",

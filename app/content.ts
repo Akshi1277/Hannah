@@ -14,6 +14,8 @@ export const brand = {
   phone: "+91 70390 38842",
   phoneHref: "tel:+917039038842",
   whatsapp: "917039038842",
+  instagram: "https://www.instagram.com/hannahpixels.ig",
+  instagramHandle: "@hannahpixels.ig",
   logo: {
     dark: "/brand/logo-dark.png", // terracotta + green, for cream backgrounds
     light: "/brand/logo-white.png", // for charcoal backgrounds
