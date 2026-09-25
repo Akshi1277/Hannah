@@ -204,7 +204,7 @@ export default function ScrollHero() {
       id="top"
       ref={containerRef}
       aria-label="Where ideas take form"
-      style={{ height: "560vh", position: "relative" }}
+      style={{ height: "520vh", position: "relative" }}
     >
       <div
         style={{

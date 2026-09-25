@@ -10,13 +10,13 @@ const link = "text-[17px] text-cream/85 transition-colors duration-300 hover:tex
 
 export default function Footer() {
   return (
-    <footer className="relative isolate overflow-hidden bg-[#141210] text-cream">
+    <footer className="relative isolate overflow-hidden bg-charcoal text-cream">
       {/* HANNAH watermark: the site display face, barely lifted off the page and cut by the bottom edge */}
       <motion.p
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 select-none whitespace-nowrap display text-center text-[clamp(64px,24vw,520px)] text-cream/[0.05]"
-        initial={{ opacity: 0, y: "55%" }}
-        whileInView={{ opacity: 1, y: "40%" }}
+        initial={{ opacity: 0, y: "37%" }}
+        whileInView={{ opacity: 1, y: "22%" }}
         viewport={{ once: true }}
         transition={{ duration: 1.8, ease: EASE }}
       >
@@ -63,7 +63,7 @@ export default function Footer() {
           {/* enquiries */}
           <div className="lg:col-span-3 lg:border-l lg:border-cream/10 lg:pl-8 lg:pl-12">
             <p className={colLabel}>Enquiries</p>
-            <a href={`mailto:${brand.email}`} className="block whitespace-nowrap text-[17px] text-[#CF9A72] transition-colors hover:text-cream">
+            <a href={`mailto:${brand.email}`} className="block whitespace-nowrap text-[17px] text-cream underline decoration-copper decoration-1 underline-offset-[6px] transition-colors hover:text-copper">
               {brand.email}
             </a>
             <a href={brand.phoneHref} className={`${link} mt-2 block`}>{brand.phone}</a>
