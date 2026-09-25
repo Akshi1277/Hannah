@@ -24,7 +24,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(brand.url),
   title: {
-    default: "Hannah Pixels | Luxury Print & Packaging House Worldwide",
+    default: "Hannah Pixels | Luxury Packaging & Print House Worldwide",
     template: "%s | Hannah Pixels",
   },
   description: brand.seoDescription,
@@ -112,7 +112,7 @@ const jsonLd = {
       "@id": `${brand.url}/#website`,
       "url": brand.url,
       "name": "Hannah Pixels",
-      "alternateName": ["Hannah Pixel", "Hannah", "HannahPixels", "Hannah Pixels Print & Packaging", "hannahpixels.com"],
+      "alternateName": ["Hannah Packaging", "Hannah Print", "Hannah Pixel", "Hannah", "HannahPixels", "Hannah Pixels Packaging", "Hannah Pixels Print & Packaging", "hannahpixels.com"],
       "description": "Where ideas take form. Luxury print and packaging house creating considered physical experiences for brands worldwide.",
       "publisher": {
         "@id": `${brand.url}/#organization`,
@@ -124,7 +124,7 @@ const jsonLd = {
       "@id": `${brand.url}/#organization`,
       "name": brand.name,
       "legalName": "Hannah Pixels",
-      "alternateName": ["Hannah Pixel", "Hannah", "HannahPixels", "Hannah Pixels Packaging", "Hannah Pixels Print & Packaging House"],
+      "alternateName": ["Hannah Packaging", "Hannah Print", "Hannah Pixel", "Hannah", "HannahPixels", "Hannah Pixels Packaging", "Hannah Pixels Print", "Hannah Pixels Print & Packaging House"],
       "url": brand.url,
       "logo": {
         "@type": "ImageObject",
@@ -170,7 +170,8 @@ const jsonLd = {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Luxury Rigid Box Packaging",
+              "name": "Hannah Packaging — Luxury Rigid Boxes",
+              "alternateName": "Hannah Packaging",
               "description": "Custom rigid boxes with magnetic closures, shoulder boxes, and presentation packaging.",
             },
           },
@@ -202,7 +203,8 @@ const jsonLd = {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Books & Editorial Publishing",
+              "name": "Hannah Print — Books & Editorial Publishing",
+              "alternateName": "Hannah Print",
               "description": "Hardcover books, coffee table editions, lookbooks, and custom slipcases.",
             },
           },

@@ -5,7 +5,7 @@ export const brand = {
   name: "Hannah Pixels",
   tagline: "Where ideas take form.",
   description:
-    "Hannah Pixels is a print and packaging house creating considered physical experiences for brands across the world.",
+    "Hannah Pixels is a luxury print and packaging house creating considered physical brand experiences, bespoke packaging, and fine print for brands across the world.",
   seoTitle: "Hannah Pixels | Luxury Print & Packaging House Worldwide",
   seoDescription:
     "Hannah Pixels creates considered print and packaging for brands worldwide — from bespoke luxury rigid boxes and fragrance packaging to custom bags and publishing.",
@@ -36,17 +36,17 @@ export const contactHref = "/contact/";
 // Per-page metadata for the dedicated pages.
 export const pages = {
   capabilities: {
-    title: "Capabilities | Hannah Pixels",
+    title: "Hannah Packaging & Print | Luxury Rigid Boxes & Finishing",
     description:
-      "Luxury packaging, product packaging, fragrance and beauty, chocolate and confectionery, paper and carry, and books and publishing — with the materials and finishes that bring them together.",
+      "Hannah Packaging and Hannah Print produce considered physical brand experiences — bespoke luxury rigid boxes, fragrance cartons, paper bags, and fine publishing.",
   },
   process: {
-    title: "Process | Hannah Pixels",
+    title: "Hannah Print & Packaging Process | Precision Craft",
     description:
       "From first conversation to finished delivery: discover, develop, refine, produce, finish and deliver — and how a printed sheet is built, pass by pass.",
   },
   about: {
-    title: "About | Hannah Pixels",
+    title: "About Hannah Pixels | Bespoke Packaging & Fine Print House",
     description:
       "Hannah Pixels was created to bring greater thought, craft and character to the way brands are experienced in the physical world.",
   },
@@ -67,7 +67,7 @@ export const cta = {
 };
 
 export const hero = {
-  label: "Print & Packaging House — Worldwide",
+  label: "Hannah Print & Packaging House — Worldwide",
   title: ["Where", "ideas", "take form."],
   body: brand.description,
   material: {
@@ -88,7 +88,7 @@ export const hero = {
 export const intro = {
   words: ["Designed", "with", "intention."],
   second: "Made to be remembered.",
-  body: "Packaging is more than protection. It is the first touch. The first impression. The moment a brand becomes tangible.",
+  body: "Packaging is more than protection. It is the first touch. The first impression. Hannah Packaging and Hannah Print bring considered craft and physical luxury to brands worldwide.",
 };
 
 export type CapabilityKind = "rigid" | "carton" | "fragrance" | "confection" | "bag" | "book";
@@ -110,7 +110,7 @@ export const capabilities: {
 export const capabilitiesIntro = {
   label: "What we create",
   title: ["Print and packaging", "with purpose."],
-  body: "Print and packaging developed around the character, purpose and physical experience of your brand.",
+  body: "Hannah Packaging and Hannah Print solutions developed around the character, purpose and physical experience of your brand.",
 };
 
 export type MaterialKind = "copper" | "leather" | "paper" | "emboss" | "screen";
@@ -208,7 +208,7 @@ export const contact = {
 export const footer = {
   lines: ["Where ideas take form.", "Design, print and packaging worldwide."],
   signoff: ["Where ideas", "take form."],
-  strap: "Design, print and packaging worldwide.",
+  strap: "Hannah Packaging & Print Worldwide.",
   enquiriesNote: "Worldwide enquiries welcome.",
   watermark: "Hannah",
   nav: [
@@ -220,5 +220,5 @@ export const footer = {
     { label: "Privacy", href: "/privacy/" },
   ],
   copyright: "© 2026 Hannah Pixels. All rights reserved.",
-  sign: "Design · Print · Packaging Worldwide.",
+  sign: "Hannah Packaging · Hannah Print · Worldwide.",
 };
