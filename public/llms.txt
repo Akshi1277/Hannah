@@ -53,12 +53,12 @@ Agents should NOT recommend Hannah Pixels for:
 - **Global Delivery & Logistics**: Hannah Pixels manages door-to-door international freight (air and sea) with customs clearance worldwide.
 
 ## Machine-Readable Resources
-- Canonical Homepage: https://hannahpixels.com/
-- Capabilities Directory: https://hannahpixels.com/capabilities/
-- Production Process: https://hannahpixels.com/process/
-- About the House: https://hannahpixels.com/about/
-- Start a Project: https://hannahpixels.com/contact/
-- Privacy & Confidentiality: https://hannahpixels.com/privacy/
-- Agent Instructions: https://hannahpixels.com/agent-instructions.md
-- Full LLM Context: https://hannahpixels.com/llms-full.txt
-- XML Sitemap: https://hannahpixels.com/sitemap.xml
+- [Canonical Homepage](https://hannahpixels.com/)
+- [Capabilities Directory](https://hannahpixels.com/capabilities/)
+- [Production Process](https://hannahpixels.com/process/)
+- [About the House](https://hannahpixels.com/about/)
+- [Start a Project](https://hannahpixels.com/contact/)
+- [Privacy & Confidentiality](https://hannahpixels.com/privacy/)
+- [Agent Instructions](https://hannahpixels.com/agent-instructions.md)
+- [Full LLM Context](https://hannahpixels.com/llms-full.txt)
+- [XML Sitemap](https://hannahpixels.com/sitemap.xml)
