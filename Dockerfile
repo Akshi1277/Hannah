@@ -13,11 +13,9 @@ COPY . .
 RUN npm run build
 
 # Install serve to host static files
-RUN npm install -g serve
-
 EXPOSE 3000
 
 ENV NODE_ENV=production
 
 # Serve the static export from 'out' directory on port 3000
-CMD ["serve", "out", "-l", "3000"]
+CMD ["node", "server.mjs"]

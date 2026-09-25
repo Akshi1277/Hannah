@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx serve out",
+    "start": "node server.mjs",
     "typecheck": "tsc --noEmit",
     "postbuild": "node scripts/flatten-prefetch.mjs"
   },

@@ -132,6 +132,14 @@ const jsonLd = {
       "slogan": brand.tagline,
       "email": brand.email,
       "telephone": brand.phone,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Bandra West",
+        "addressLocality": "Mumbai",
+        "addressRegion": "Maharashtra",
+        "postalCode": "400050",
+        "addressCountry": "IN"
+      },
       "parentOrganization": {
         "@type": "Organization",
         "name": "BRAHM Global Holdings",

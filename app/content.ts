@@ -52,6 +52,10 @@ export const pages = {
     title: "Start a Project | Hannah Pixels",
     description: "Tell us about your product, your brand and what you have in mind. Enquiries worldwide.",
   },
+  privacy: {
+    title: "Privacy Policy | Hannah Pixels",
+    description: "Privacy policy, confidentiality safeguards, and data protection commitments for Hannah Pixels bespoke print and packaging clients worldwide.",
+  },
 };
 
 export const cta = {
@@ -211,6 +215,7 @@ export const footer = {
     { label: "Process", href: "/process/" },
     { label: "About", href: "/about/" },
     { label: "Contact", href: "/contact/" },
+    { label: "Privacy", href: "/privacy/" },
   ],
   copyright: "© 2026 Hannah Pixels. All rights reserved.",
   sign: "Design · Print · Packaging Worldwide.",
