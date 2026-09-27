@@ -3,7 +3,7 @@
 
 export const brand = {
   name: "Hannah Pixels",
-  tagline: "Where ideas take form.",
+  tagline: "From Vision to Reality.",
   description:
     "Hannah Pixels is a luxury print and packaging house creating considered physical brand experiences, bespoke packaging, and fine print for brands across the world.",
   seoTitle: "Hannah Pixels | Luxury Print & Packaging House Worldwide",
@@ -68,7 +68,7 @@ export const cta = {
 
 export const hero = {
   label: "Hannah Print & Packaging House — Worldwide",
-  title: ["Where", "ideas", "take form."],
+  title: ["From", "Vision", "to Reality."],
   body: brand.description,
   material: {
     label: "Materials that matter",
@@ -206,8 +206,8 @@ export const contact = {
 };
 
 export const footer = {
-  lines: ["Where ideas take form.", "Design, print and packaging worldwide."],
-  signoff: ["Where ideas", "take form."],
+  lines: ["From Vision to Reality.", "Design, print and packaging worldwide."],
+  signoff: ["From Vision", "to Reality."],
   strap: "Hannah Packaging & Print Worldwide.",
   enquiriesNote: "Worldwide enquiries welcome.",
   watermark: "Hannah",

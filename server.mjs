@@ -29,7 +29,7 @@ const MIME_TYPES = {
 };
 
 const MARKDOWN_CONTENT = {
-  "/": `# Hannah Pixels (Hannah Packaging & Hannah Print) — Where ideas take form.
+  "/": `# Hannah Pixels (Hannah Packaging & Hannah Print) — From Vision to Reality.
 
 > Hannah Pixels is an international luxury print and packaging house creating considered physical brand experiences, luxury packaging, and bespoke print for brands worldwide. Operates under BRAHM Global Holdings.
 

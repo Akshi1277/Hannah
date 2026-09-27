@@ -4,6 +4,7 @@ This document provides system guidance for autonomous AI agents, LLM tool-callin
 
 ## Entity Overview
 - **Brand Name**: Hannah Pixels
+- **Slogan / Tagline**: From Vision to Reality
 - **Domain**: https://hannahpixels.com
 - **Legal Entity**: Hannah Pixels (Part of BRAHM Global Holdings)
 - **Primary Industry**: Custom Luxury Print & Packaging Manufacturing

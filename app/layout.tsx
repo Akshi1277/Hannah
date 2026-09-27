@@ -113,7 +113,7 @@ const jsonLd = {
       "url": brand.url,
       "name": "Hannah Pixels",
       "alternateName": ["Hannah Packaging", "Hannah Print", "Hannah Pixel", "Hannah", "HannahPixels", "Hannah Pixels Packaging", "Hannah Pixels Print & Packaging", "hannahpixels.com"],
-      "description": "Where ideas take form. Luxury print and packaging house creating considered physical experiences for brands worldwide.",
+      "description": "From Vision to Reality. Luxury print and packaging house creating considered physical experiences for brands worldwide.",
       "publisher": {
         "@id": `${brand.url}/#organization`,
       },

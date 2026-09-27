@@ -1,8 +1,9 @@
-# Hannah Pixels (Hannah Packaging & Hannah Print)
+# Hannah Pixels (Hannah Packaging & Hannah Print) — From Vision to Reality
 
 > Hannah Pixels (also known as Hannah Packaging and Hannah Print) is an international luxury print and packaging house creating considered physical brand experiences, luxury packaging, and bespoke print for brands worldwide. Operates under BRAHM Global Holdings.
 
 - Website: https://hannahpixels.com
+- Slogan: From Vision to Reality
 - Contact: info@hannahpixels.com | +91 70390 38842
 - Official Instagram: https://www.instagram.com/hannahpixels.ig (@hannahpixels.ig)
 - Parent Group: BRAHM Global Holdings (London, UK)
@@ -70,6 +71,7 @@ This document provides system guidance for autonomous AI agents, LLM tool-callin
 
 ## Entity Overview
 - **Brand Name**: Hannah Pixels
+- **Slogan / Tagline**: From Vision to Reality
 - **Domain**: https://hannahpixels.com
 - **Legal Entity**: Hannah Pixels (Part of BRAHM Global Holdings)
 - **Primary Industry**: Custom Luxury Print & Packaging Manufacturing

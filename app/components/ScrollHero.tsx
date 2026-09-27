@@ -203,7 +203,7 @@ export default function ScrollHero() {
     <section
       id="top"
       ref={containerRef}
-      aria-label="Where ideas take form"
+      aria-label="From Vision to Reality"
       style={{ height: "520vh", position: "relative" }}
     >
       <div

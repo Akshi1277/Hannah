@@ -26,7 +26,7 @@ export default function PrivacyPage() {
             Privacy Policy &amp; Confidentiality
           </h1>
           <p className="text-[17px] text-charcoal/70 max-w-2xl leading-relaxed">
-            Where ideas take form with structural integrity and utmost discretion. We treat proprietary brand dielines, artwork, and client information with strict confidentiality.
+            From Vision to Reality with structural integrity and utmost discretion. We treat proprietary brand dielines, artwork, and client information with strict confidentiality.
           </p>
           <p className="text-[13px] font-mono text-charcoal/50 mt-4">
             Last Updated: September 2026 | Effective for all global production contracts and inquiries
